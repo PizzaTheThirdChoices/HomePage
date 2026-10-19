@@ -1,4 +1,4 @@
-# Pizza The Third Choices — MUSIC PERIODIC TABLE V5
+# Pizza The Third Choices — MUSIC PERIODIC TABLE V6
 
 ## 起動方法
 `index.html` をブラウザで開きます。GitHub Pages への公開も可能です（サーバー処理不要）。
