@@ -22,8 +22,15 @@
 <script src="script.js"></script>
 <script>
 const container=document.querySelector('#albums-list');
+// Album track order is independent of the periodic-table element numbers.
+const albumTrackOrder={
+ 'Love at First Sight':['ITP','POL','THR','APT','JOE','STR','MEL','FIM','HRC','CNA','CLP'],
+ 'Inevitable Death':['EXI','TRL','TRJ','QUA','SUC','WSN','DOK','DET','SAT','CHU','LA'],
+ 'Pentagon Pizza Puzzle':['OTB','TSL','TSR','PPP','OH%','TRS','WHY','PRI','VDM','ZOO','THT']
+};
 for(const [album,src] of Object.entries(albumImages)){
- const tracks=songs.filter(song=>song.album===album);
+ const order=albumTrackOrder[album]||[];
+ const tracks=order.map(code=>songs.find(song=>song.album===album&&song.code===code)).filter(Boolean);
  const card=document.createElement('section');card.className='album-card';
  const cover=document.createElement('img');cover.className='album-card-cover';cover.src=src;cover.alt=album+' ジャケット';cover.loading='lazy';
  const body=document.createElement('div');body.className='album-card-body';
