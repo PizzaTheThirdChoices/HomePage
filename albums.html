@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101010">
+<title>ALBUMS | Pizza The Third Choices</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="site-shell">
+<nav class="top-nav" aria-label="メインナビゲーション">
+<a class="wordmark" href="index.html"><img src="assets/logo/logo-white.png" alt="Pizza The Third Choices" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>Pizza The Third Choices</span></a>
+<div class="nav-links"><a href="index.html">MUSIC PERIODIC TABLE</a><a class="active" aria-current="page" href="albums.html">ALBUMS</a><a href="index.html#detail">SONG DETAIL</a></div>
+</nav>
+<main class="albums-page">
+<header class="albums-heading"><p class="eyebrow">PIZZA THE THIRD CHOICES / DISCOGRAPHY</p><h1>ALBUMS</h1><p class="intro">アルバムを選んで収録曲を見る。曲名から各楽曲の詳細ページへ移動できます。</p></header>
+<div id="albums-list" class="albums-grid"></div>
+</main>
+<footer>© Pizza The Third Choices · MUSIC PERIODIC TABLE</footer>
+</div>
+<script src="script.js"></script>
+<script>
+const container=document.querySelector('#albums-list');
+for(const [album,src] of Object.entries(albumImages)){
+ const tracks=songs.filter(song=>song.album===album);
+ const card=document.createElement('section');card.className='album-card';
+ const cover=document.createElement('img');cover.className='album-card-cover';cover.src=src;cover.alt=album+' ジャケット';cover.loading='lazy';
+ const body=document.createElement('div');body.className='album-card-body';
+ const meta=document.createElement('p');meta.className='eyebrow';meta.textContent=tracks.length+' TRACKS';
+ const heading=document.createElement('h2');heading.textContent=album;
+ const list=document.createElement('ol');list.className='album-track-list';
+ for(const track of tracks){
+  const item=document.createElement('li');const link=document.createElement('a');link.href=songUrl(track);link.textContent=track.title;item.append(link);list.append(item);
+ }
+ body.append(meta,heading,list);card.append(cover,body);container.append(card);
+}
+</script>
+</body>
+</html>
