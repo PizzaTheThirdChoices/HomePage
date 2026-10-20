@@ -56,3 +56,18 @@
   .element .marks { top: 3px; right: 3px; gap: 2px; }
   .element .mark-icon { width: 18px; height: 18px; padding: 2px; border-radius: 3px; }
 }
+
+/* Albums index */
+.albums-page{max-width:1200px;margin:0 auto;padding:38px 0 70px}
+.albums-heading{margin-bottom:32px}
+.albums-heading h1{margin:12px 0 18px}
+.albums-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));align-items:start;gap:26px}
+.album-card{min-width:0;border:1px solid #464646;background:#141414;border-radius:5px;overflow:hidden}
+.album-card-cover{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.album-card-body{padding:22px}
+.album-card h2{font-size:clamp(21px,2vw,29px);line-height:1.25;margin:10px 0 18px;overflow-wrap:anywhere}
+.album-track-list{padding-left:23px;margin:0;line-height:1.65}
+.album-track-list li{padding:5px 0;font-size:14px}
+.album-track-list a{text-decoration:none;border-bottom:1px solid transparent}
+.album-track-list a:hover,.album-track-list a:focus-visible{border-bottom-color:currentColor}
+@media(max-width:650px){.albums-page{padding:27px 0 45px}.albums-grid{gap:20px}.album-card-body{padding:18px}}
