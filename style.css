@@ -50,3 +50,9 @@
     object-fit: cover;
   }
 }
+
+/* Keep song marks proportional to the smaller periodic-table cells on phones. */
+@media (max-width: 650px) {
+  .element .marks { top: 3px; right: 3px; gap: 2px; }
+  .element .mark-icon { width: 18px; height: 18px; padding: 2px; border-radius: 3px; }
+}
