@@ -1,1 +1,222 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101010"><title>MUSIC PERIODIC TABLE | Pizza The Third Choices</title><link rel="stylesheet" href="style.css"></head><body><div class="site-shell"><nav class="top-nav" aria-label="メインナビゲーション"><a class="wordmark" href="index.html"><img src="assets/logo/logo-white.png" alt="Pizza The Third Choices" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>Pizza The Third Choices</span></a><div class="nav-links"><a class="active" href="index.html">MUSIC PERIODIC TABLE</a><a href="#legend">ALBUMS</a><a href="#detail">SONG DETAIL</a></div></nav><main class="main-layout"><div class="left-column"><header class="page-head"><div><p class="eyebrow">PIZZA THE THIRD CHOICES / TRACK ARCHIVE</p><h1>MUSIC<br>PERIODIC TABLE</h1><p class="subheading">楽曲周期表</p></div><div class="intro-tools"><p class="intro">すべての楽曲を、ひとつの周期表に。<br>隣り合う曲、対になる曲、つながるシリーズ。<br>Pizza The Third Choicesの音楽の構造を、ここに。</p><label class="search-label"><span>SEARCH</span><input id="search" type="search" placeholder="曲名・番号・コードで検索…" autocomplete="off"></label></div></header><div class="table-scroll"><div id="periodic" class="periodic" aria-label="楽曲周期表"></div></div><div id="legend" class="legend" aria-label="凡例"></div></div><aside id="detail" class="detail" aria-live="polite" aria-label="選択中の楽曲"></aside></main><footer>© Pizza The Third Choices · MUSIC PERIODIC TABLE / PROTOTYPE V6</footer></div><script src="script.js"></script></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pizza The Third Choices | Official Website</title>
+  <!-- 共通スタイルシート -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ========================================
+       SITE SHELL / ページ全体
+  ========================================= -->
+  <div class="site-shell">
+    <!-- ========================================
+         HEADER / ナビゲーション
+    ========================================= -->
+    <nav class="top-nav">
+      <!-- ヘッダーロゴ -->
+      <a class="wordmark" href="index.html">
+        <img
+          src="assets/logo/logo-white.png"
+          alt="Pizza The Third Choices"
+          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+        >
+        <span hidden>Pizza The Third Choices</span>
+      </a>
+      <!-- ページ移動メニュー -->
+      <div class="nav-links">
+        <a class="active" href="index.html">HOME</a>
+        <a href="music.html">MUSIC</a>
+        <a href="live.html">LIVE / ARCHIVE</a>
+        <a href="merch.html">MERCH</a>
+      </div>
+      <!-- 公式SNS・配信サービスのアイコン -->
+      <!-- data/social.js に登録されたリンクが自動表示される -->
+      <div
+        class="social-links header-social"
+        data-social-links
+        aria-label="公式SNS・配信ストア"
+      ></div>
+    </nav>
+    <!-- ========================================
+         MAIN / ホームページ本文
+    ========================================= -->
+    <main class="home-main">
+      <!-- ======================================
+           HERO / メインビジュアル
+      ======================================= -->
+      <section class="hero">
+        <p class="eyebrow">
+          PIZZA THE THIRD CHOICES / OFFICIAL WEBSITE
+        </p>
+        <!-- メインロゴ -->
+        <!-- 画像が読み込めない場合は文字タイトルを表示 -->
+        <img
+          class="hero-logo"
+          src="assets/logo/logo-white.png"
+          alt="Pizza The Third Choices"
+          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+        >
+        <h1 hidden>Pizza The Third Choices</h1>
+        <p class="hero-caption">
+          MUSIC / LIVE / ARCHIVE
+        </p>
+        <!-- メインリンク -->
+        <div class="hero-actions">
+          <a href="music.html">EXPLORE THE MUSIC ↗</a>
+          <a href="live.html">LIVE & ARCHIVE ↗</a>
+        </div>
+      </section>
+      <!-- ======================================
+           ARTIST VISUALS / アー写・追加ロゴ
+      ======================================= -->
+      <section class="home-visuals">
+        <!-- 横長アーティスト写真 -->
+        <!-- 画像が存在しない場合はセクション全体を非表示 -->
+        <img
+          src="assets/photos/artist-wide.webp"
+          alt="Pizza The Third Choices アーティスト写真"
+          onerror="this.closest('.home-visuals').hidden=true"
+        >
+        <!-- 追加ロゴ -->
+        <!-- 画像が存在しない場合はロゴのみ非表示 -->
+        <img
+          class="home-extra-logo"
+          src="assets/logo/logo-Saski.webp"
+          alt="Pizza The Third Choices 別ロゴ"
+          onerror="this.hidden=true"
+        >
+      </section>
+      <!-- ======================================
+           NEXT LIVE / 次回ライブ情報
+      ======================================= -->
+      <section class="home-live">
+        <div class="section-bar">
+          <h2>NEXT LIVE</h2>
+          <a href="live.html">ALL EVENTS ↗</a>
+        </div>
+        <!--
+          ライブ情報の表示領域
+          data/events.js のイベント情報を読み込み、
+          ページ末尾の renderEvents() で自動生成する。
+          公演情報を追加する場合は
+          index.html ではなく data/events.js を編集する。
+        -->
+        <div id="home-events"></div>
+      </section>
+      <!-- ======================================
+           FEATURE LINKS / 主要コンテンツ
+      ======================================= -->
+      <section class="home-sections">
+        <!-- MUSIC / 楽曲表 -->
+        <a class="feature-tile" href="music.html">
+          <span class="eyebrow">
+            01 / DISCOGRAPHY
+          </span>
+          <h2>
+            MUSIC<br>
+            PERIODIC TABLE
+          </h2>
+          <p>
+            Pizza The Third Choicesの全ての楽曲を、一つの表に。
+          </p>
+          <span>EXPLORE ↗</span>
+        </a>
+        <!-- LIVE / ライブアーカイブ -->
+        <a class="feature-tile" href="live.html">
+          <span class="eyebrow">
+            02 / EVENTS
+          </span>
+          <h2>
+            LIVE<br>
+            ARCHIVE
+          </h2>
+          <p>
+            これからの公演と、これまでの記録。
+          </p>
+          <span>VIEW EVENTS ↗</span>
+        </a>
+      </section>
+      <!-- ======================================
+           MERCH / グッズ紹介
+      ======================================= -->
+      <section class="home-merch">
+        <div class="section-bar">
+          <h2>MERCH</h2>
+          <a href="merch.html">ALL ITEMS ↗</a>
+        </div>
+        <!-- グッズの概要 -->
+        <p>STICKER / T-SHIRT</p>
+        <!-- グッズ一覧ページへ -->
+        <a class="ticket-main" href="merch.html">
+          VIEW MERCH ↗
+        </a>
+      </section>
+      <!-- ======================================
+           LISTEN / RELEASES
+           アルバム・音楽配信情報
+      ======================================= -->
+      <section class="social-section" aria-label="アルバム配信">
+        <div class="section-bar">
+          <h2>LISTEN / RELEASES</h2>
+          <a href="music.html">TRACK LIST ↗</a>
+        </div>
+        <!--
+          アルバム一覧の表示領域
+          data/albums.js に登録された作品を
+          releases.js が読み込んで自動表示する。
+          作品情報や配信リンクを変更する場合は
+          data/albums.js を編集する。
+        -->
+        <div
+          id="home-releases"
+          class="release-links"
+        ></div>
+      </section>
+      <!-- ======================================
+           FOLLOW US / 公式SNS
+      ======================================= -->
+      <section class="social-section" aria-label="公式SNS">
+        <div class="section-bar">
+          <h2>FOLLOW US</h2>
+          <span class="eyebrow">OFFICIAL CHANNELS</span>
+        </div>
+        <!--
+          公式SNS・配信サービスのリンク
+          data/social.js の設定から自動生成する。
+          リンクを変更する場合は data/social.js を編集する。
+        -->
+        <div
+          class="social-links"
+          data-social-links
+        ></div>
+      </section>
+    </main>
+    <!-- ========================================
+         FOOTER / フッター
+    ========================================= -->
+    <footer>
+      © Pizza The Third Choices
+    </footer>
+  </div>
+  <!-- ==========================================
+       JAVASCRIPT / データと表示処理
+       注意：
+       以下の読み込み順は変更しない。
+  =========================================== -->
+  <!-- ライブ情報 -->
+  <script src="data/events.js"></script>
+  <!-- ホームページのライブ情報を最大2件表示 -->
+  <script>
+    renderEvents('home-events', 2);
+  </script>
+  <!-- アルバム・リリース情報 -->
+  <script src="data/albums.js"></script>
+  <!-- 公式SNS・配信サービス -->
+  <script src="data/social.js"></script>
+  <!-- ホームページのリリース表示処理 -->
+  <script src="releases.js"></script>
+</body>
+</html>
