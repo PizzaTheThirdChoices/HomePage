@@ -1,4 +1,158 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LIVE / ARCHIVE | Pizza The Third Choices</title><link rel="stylesheet" href="style.css"></head>
-<body><div class="site-shell"><nav class="top-nav"><a class="wordmark" href="index.html"><img src="assets/logo/logo-white.png" alt="Pizza The Third Choices" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span hidden>Pizza The Third Choices</span></a>
-<div class="nav-links"><a href="index.html">HOME</a><a href="music.html">MUSIC</a><a class="active" href="live.html">LIVE / ARCHIVE</a><a href="merch.html">MERCH</a></div><div class="social-links header-social" data-social-links aria-label="公式SNS・配信ストア"></div></nav><main class="archive-main"><p class="eyebrow">PIZZA THE THIRD CHOICES / SHOW HISTORY</p><h1>LIVE<br>ARCHIVE</h1><p class="intro">開催予定のライブや、過去のイベント情報のアーカイブ。</p><div id="live-events"></div></main><section class="social-section"><h2>FOLLOW US</h2><div class="social-links" data-social-links></div></section><footer>© Pizza The Third Choices</footer></div><script src="data/events.js"></script><script>renderEvents('live-events');</script><script src="data/social.js"></script></body></html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>LIVE / ARCHIVE | Pizza The Third Choices</title>
+
+  <!-- 共通スタイルシート -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ========================================
+       SITE SHELL / ページ全体
+  ========================================= -->
+  <div class="site-shell">
+
+
+    <!-- ========================================
+         HEADER / ナビゲーション
+    ========================================= -->
+    <nav class="top-nav">
+
+      <!-- ヘッダーロゴ -->
+      <!-- 画像が読み込めない場合は文字タイトルを表示 -->
+      <a class="wordmark" href="index.html">
+
+        <img
+          src="assets/logo/logo-white.png"
+          alt="Pizza The Third Choices"
+          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+        >
+
+        <span hidden>Pizza The Third Choices</span>
+
+      </a>
+
+      <!-- ページ移動メニュー -->
+      <div class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="music.html">MUSIC</a>
+        <a class="active" href="live.html">LIVE / ARCHIVE</a>
+        <a href="merch.html">MERCH</a>
+      </div>
+
+      <!-- 公式SNS・配信サービスのアイコン -->
+      <!-- data/social.js の設定から自動生成される -->
+      <div
+        class="social-links header-social"
+        data-social-links
+        aria-label="公式SNS・配信ストア"
+      ></div>
+
+    </nav>
+
+
+    <!-- ========================================
+         MAIN / ライブ一覧・アーカイブ
+    ========================================= -->
+    <main class="archive-main">
+
+      <!-- ページ上部の小見出し -->
+      <p class="eyebrow">
+        PIZZA THE THIRD CHOICES / SHOW HISTORY
+      </p>
+
+      <!-- ページタイトル -->
+      <h1>
+        LIVE<br>
+        ARCHIVE
+      </h1>
+
+      <!-- ページ説明文 -->
+      <p class="intro">
+        開催予定のライブや、過去のイベント情報のアーカイブ。
+      </p>
+
+
+      <!-- ======================================
+           LIVE EVENTS / ライブ情報一覧
+      ======================================= -->
+
+      <!--
+        この領域には、JavaScriptによって
+        ライブ情報が自動生成される。
+
+        ・開催予定のライブ
+        ・過去のライブアーカイブ
+        ・公演日
+        ・イベント名
+        ・会場
+        ・フライヤー
+        ・取り置きフォームへのリンク（対象公演）
+
+        イベント情報を追加・編集する場合は
+        data/events.js を変更する。
+
+        実際の表示処理は、ページ末尾の
+        renderEvents('live-events') で実行される。
+      -->
+      <div id="live-events"></div>
+
+    </main>
+
+
+    <!-- ========================================
+         FOLLOW US / 公式SNS
+    ========================================= -->
+    <section class="social-section">
+
+      <h2>FOLLOW US</h2>
+
+      <!--
+        公式SNS・配信サービスへのリンクを表示する。
+
+        リンク先の変更は data/social.js で行う。
+      -->
+      <div
+        class="social-links"
+        data-social-links
+      ></div>
+
+    </section>
+
+
+    <!-- ========================================
+         FOOTER / フッター
+    ========================================= -->
+    <footer>
+      © Pizza The Third Choices
+    </footer>
+
+  </div>
+
+
+  <!-- ==========================================
+       JAVASCRIPT / データと表示処理
+
+       注意：
+       以下の読み込み順は変更しない。
+  =========================================== -->
+
+  <!-- ライブ情報のデータ・表示処理 -->
+  <script src="data/events.js"></script>
+
+  <!-- ライブ一覧・アーカイブを表示 -->
+  <script>
+    renderEvents('live-events');
+  </script>
+
+  <!-- 公式SNS・配信サービスのリンク -->
+  <script src="data/social.js"></script>
+
+</body>
+</html>
