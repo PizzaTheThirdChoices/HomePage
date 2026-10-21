@@ -1,17 +1,48 @@
 // ライブ情報。サンプルはコメントのみ。実際の公演情報とURLを登録してください。
 const DEFAULT_TICKET_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScENBWWtNbC9MeIqkYOe47HLfAf9lmO9ihr488N10owD7viOw/viewform';
 const liveEvents = [
-  {id:'20261108',date:'2026-11-08',title:'Perfect Pizza Party',venue:'',media:[{type:'flyer',src:'assets/events/261108-PerfectPizzaParty.webp'}]},
-  {id:'20260829',date:'2026-08-29',title:'Komaba Independence Days',venue:'',media:[{type:'flyer',src:'assets/events/260829-KomabaIndependenceDays-1.JPG'},{type:'flyer',src:'assets/events/260829-KomabaIndependenceDays-2.JPG'},{type:'setlist',src:'assets/setlist/260829-KomabaIndependenceDays.pdf'}]},
-  {id:'20260519',date:'2026-05-19',title:'across',venue:'',media:[{type:'flyer',src:'assets/events/260519-across.JPG'},{type:'setlist',src:'assets/setlist/260519-across.pdf'}]},
-  {id:'20260329',date:'2026-03-29',title:'独立前夜',venue:'',media:[{type:'flyer',src:'assets/events/260329-#U72ec#U7acb#U524d#U591c-1.JPG'},{type:'flyer',src:'assets/events/260329-#U72ec#U7acb#U524d#U591c-2.JPG'},{type:'setlist',src:'assets/setlist/260329-#U72ec#U7acb#U524d#U591c.pdf'}]},
-  {id:'20250803',date:'2025-08-03',title:'uncanny valley',venue:'',media:[{type:'flyer',src:'assets/events/250803-uncanny_valley.png'},{type:'setlist',src:'assets/setlist/250803-uncanny_valley.pdf'}]},
-  {id:'20250706',date:'2025-07-06',title:'YEAH3',venue:'',media:[{type:'flyer',src:'assets/events/250706-YEAH3.png'},{type:'setlist',src:'assets/setlist/250706-YEAH3.pdf'}]},
-  {id:'20250627',date:'2025-06-27',title:'PIZZA OF 100% DEATH',venue:'',media:[{type:'flyer',src:'assets/events/250627-PIZZAOF100_DEATH-1.png'},{type:'flyer',src:'assets/events/250627-PIZZAOF100_DEATH-2.png'},{type:'flyer',src:'assets/events/250627-PIZZAOF100_DEATH-3.png'},{type:'setlist',src:'assets/setlist/250627-PIZZAOF100_DEATH.pdf'}]},
-  {id:'20250406',date:'2025-04-06',title:'YEAH2',venue:'',media:[{type:'flyer',src:'assets/events/250406-YEAH2.png'},{type:'setlist',src:'assets/setlist/250406-YEAH2.pdf'}]},
-  {id:'20250208',date:'2025-02-08',title:'Komaba Independence Days',venue:'',media:[{type:'flyer',src:'assets/events/250208-KomabaIndependenceDays.png'},{type:'setlist',src:'assets/setlist/250208-KomabaIndependenceDays.pdf'}]},
-  {id:'20241227',date:'2024-12-27',title:'YEAH',venue:'',media:[{type:'flyer',src:'assets/events/241227-YEAH-1.png'},{type:'flyer',src:'assets/events/241227-YEAH-2.png'},{type:'flyer',src:'assets/events/241227-YEAH-3.png'},{type:'flyer',src:'assets/events/241227-YEAH-4.png'},{type:'setlist',src:'assets/setlist/241227-YEAH.pdf'}]}
+  // 画像・PDFはユーザーがGitHubの assets/events と assets/setlist に配置したファイルを参照します。
+  // 名前や拡張子が異なる場合は実ファイルに合わせて修正してください。
+  {id:'20261108',date:'2026-11-08',title:'Perfect Pizza Party',venue:'',
+   media:[
+    {type:'flyer',src:'assets/events/261108-PerfectPizzaParty.webp'}]},
+  {id:'20260829',date:'2026-08-29',title:'Komaba Independence Days',venue:'',
+   media:[
+    {type:'flyer',src:'assets/events/260829-KomabaIndependenceDays-1.JPG'},
+    {type:'flyer',src:'assets/events/260829-KomabaIndependenceDays-2.JPG'},
+    {type:'setlist',src:'assets/setlist/260829-KomabaIndependenceDays.pdf'}]},
+  {id:'20260519',date:'2026-05-19',title:'across',venue:'',
+   media:[{type:'flyer',src:'assets/events/260519-across.JPG'},
+          {type:'setlist',src:'assets/setlist/260519-across.pdf'}]},
+  {id:'20260329',date:'2026-03-29',title:'独立前夜',venue:'',
+   media:[{type:'flyer',src:'assets/events/260329-独立前夜-1.JPG'},
+          {type:'flyer',src:'assets/events/260329-独立前夜-2.JPG'},
+          {type:'setlist',src:'assets/setlist/260329-独立前夜.pdf'}]},
+  {id:'20250803',date:'2025-08-03',title:'uncanny valley',venue:'',
+   media:[{type:'flyer',src:'assets/events/250803-uncanny_valley.png'},
+          {type:'setlist',src:'assets/setlist/250803-uncanny_valley.pdf'}]},
+  {id:'20250706',date:'2025-07-06',title:'YEAH3',venue:'',
+   media:[{type:'flyer',src:'assets/events/250706-YEAH3.png'},
+          {type:'setlist',src:'assets/setlist/250706-YEAH3.pdf'}]},
+  {id:'20250627',date:'2025-06-27',title:'PIZZA OF 100% DEATH',venue:'',
+   media:[{type:'flyer',src:'assets/events/250627-PIZZAOF100_DEATH-1.png'},
+          {type:'flyer',src:'assets/events/250627-PIZZAOF100_DEATH-2.png'},
+          {type:'flyer',src:'assets/events/250627-PIZZAOF100_DEATH-3.png'},
+          {type:'setlist',src:'assets/setlist/250627-PIZZAOF100_DEATH.pdf'}]},
+  {id:'20250406',date:'2025-04-06',title:'YEAH2',venue:'',
+   media:[{type:'flyer',src:'assets/events/250406-YEAH2.png'},
+          {type:'setlist',src:'assets/setlist/250406-YEAH2.pdf'}]},
+  {id:'20250208',date:'2025-02-08',title:'Komaba Independence Days',venue:'',
+   media:[{type:'flyer',src:'assets/events/250208-KomabaIndependenceDays.png'},
+          {type:'setlist',src:'assets/setlist/250208-KomabaIndependenceDays.pdf'}]},
+  {id:'20241227',date:'2024-12-27',title:'YEAH',venue:'',
+   media:[{type:'flyer',src:'assets/events/241227-YEAH-1.png'},
+          {type:'flyer',src:'assets/events/241227-YEAH-2.png'},
+          {type:'flyer',src:'assets/events/241227-YEAH-3.png'},
+          {type:'flyer',src:'assets/events/241227-YEAH-4.png'},
+          {type:'setlist',src:'assets/setlist/241227-YEAH.pdf'}]}
 ];
+// 公演IDは YYYYMMDD (例: 20260829)。同日複数公演なら末尾に -2 などを付けます。
 function parseDay(date){return new Date(date+'T00:00:00')}
 function isUpcoming(e){const today=new Date();today.setHours(0,0,0,0);return parseDay(e.date)>=today}
 function safeEventLink(url){try{const u=new URL(url);return u.protocol==='https:'?u.href:null}catch{return null}}
