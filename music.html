@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101010">
+
+  <title>MUSIC TABLE | Pizza The Third Choices</title>
+
+  <!-- 共通スタイルシート -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ========================================
+       SITE SHELL / ページ全体
+  ========================================= -->
+  <div class="site-shell">
+
+
+    <!-- ========================================
+         HEADER / ナビゲーション
+    ========================================= -->
+    <nav
+      class="top-nav"
+      aria-label="メインナビゲーション"
+    >
+
+      <!-- ヘッダーロゴ -->
+      <!-- 画像が読み込めない場合は文字タイトルを表示 -->
+      <a class="wordmark" href="index.html">
+
+        <img
+          src="assets/logo/logo-white.png"
+          alt="Pizza The Third Choices"
+          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+        >
+
+        <span hidden>Pizza The Third Choices</span>
+
+      </a>
+
+      <!-- ページ移動メニュー -->
+      <div class="nav-links">
+        <a href="index.html">HOME</a>
+        <a class="active" href="music.html">MUSIC</a>
+        <a href="live.html">LIVE / ARCHIVE</a>
+        <a href="merch.html">MERCH</a>
+      </div>
+
+      <!-- 公式SNS・配信サービスのアイコン -->
+      <!-- data/social.js の設定から自動生成される -->
+      <div
+        class="social-links header-social"
+        data-social-links
+        aria-label="公式SNS・配信ストア"
+      ></div>
+
+    </nav>
+
+
+    <!-- ========================================
+         MAIN / 楽曲表ページ
+    ========================================= -->
+    <main class="main-layout">
+
+
+      <!-- ======================================
+           LEFT COLUMN / 楽曲表・検索・凡例
+      ======================================= -->
+      <div class="left-column">
+
+
+        <!-- ====================================
+             PAGE HEADER / タイトル・操作パネル
+        ===================================== -->
+        <header class="page-head">
+
+          <!-- ページタイトル -->
+          <div>
+
+            <p class="eyebrow">
+              PIZZA THE THIRD CHOICES / TRACK ARCHIVE
+            </p>
+
+            <h1>
+              MUSIC<br>
+              PERIODIC TABLE
+            </h1>
+
+            <p class="subheading">
+              楽曲表
+            </p>
+
+          </div>
+
+
+          <!-- ==================================
+               INTRO TOOLS / 説明・検索・表示切替
+          =================================== -->
+          <div class="intro-tools">
+
+            <!-- 楽曲表の説明文 -->
+            <p class="intro">
+              Pizza The Third Choicesの全ての楽曲を、一つの表に。
+            </p>
+
+
+            <!-- SEARCH / 楽曲検索 -->
+            <!--
+              曲名・楽曲番号・コードなどで検索する。
+
+              入力された文字列を使った絞り込みは
+              script.js で処理する。
+            -->
+            <label class="search-label">
+
+              <span>SEARCH</span>
+
+              <input
+                id="search"
+                type="search"
+                placeholder="曲名・番号・コードで検索…"
+                autocomplete="off"
+              >
+
+            </label>
+
+
+            <!-- VIEW / 楽曲表示モード -->
+            <!--
+              楽曲の並べ方を切り替える。
+
+              creation：制作順・楽曲表
+              album：アルバム別・曲順
+
+              切り替え処理は script.js で行う。
+
+              option の value は JavaScriptから
+              参照されるため、変更する場合は注意。
+            -->
+            <label class="search-label view-label">
+
+              <span>VIEW</span>
+
+              <select id="view-mode">
+
+                <option value="creation">
+                  制作順・楽曲表
+                </option>
+
+                <option value="album">
+                  アルバム別・曲順
+                </option>
+
+              </select>
+
+            </label>
+
+          </div>
+
+        </header>
+
+
+        <!-- ====================================
+             MUSIC TABLE / 楽曲表本体
+        ===================================== -->
+
+        <!--
+          楽曲表はJavaScriptによって自動生成される。
+
+          楽曲データ：
+            data/songs.js
+
+          アルバム情報：
+            data/albums.js
+
+          表示処理：
+            script.js
+
+          デザイン：
+            style.css
+
+          楽曲を追加する場合は、
+          このHTMLではなく data/songs.js を編集する。
+        -->
+        <div class="table-scroll">
+
+          <div
+            id="periodic"
+            class="periodic"
+            aria-label="楽曲表"
+          ></div>
+
+        </div>
+
+
+        <!-- ====================================
+             LEGEND / 凡例
+        ===================================== -->
+
+        <!--
+          アルバムごとの色分けなどの凡例を表示する。
+
+          内容はJavaScriptによって生成される。
+        -->
+        <div
+          id="legend"
+          class="legend"
+          aria-label="凡例"
+        ></div>
+
+
+        <!-- ====================================
+             TABLE NOTE / 操作説明
+        ===================================== -->
+        <p class="table-note">
+          タップで楽曲詳細を表示。
+          アルバム別表示では正式な収録順と配信リンクを確認できます。
+        </p>
+
+      </div>
+
+
+      <!-- ======================================
+           DETAIL PANEL / 選択中の楽曲詳細
+      ======================================= -->
+
+      <!--
+        楽曲表で選択した曲の詳細情報を表示する。
+
+        表示内容の例：
+          ・曲名
+          ・楽曲番号
+          ・収録アルバム
+          ・楽曲解説
+          ・関連動画
+
+        楽曲の基本情報：
+          data/songs.js
+
+        楽曲解説：
+          data/descriptions.js
+
+        動画情報：
+          data/videos.js
+
+        詳細パネルの表示処理：
+          script.js
+
+        aria-live="polite" により、
+        内容が更新されたことを支援技術に伝える。
+      -->
+      <aside
+        id="detail"
+        class="detail"
+        aria-live="polite"
+        aria-label="選択中の楽曲"
+      ></aside>
+
+
+    </main>
+
+
+    <!-- ========================================
+         FOLLOW US / 公式SNS
+    ========================================= -->
+    <section class="social-section">
+
+      <h2>FOLLOW US</h2>
+
+      <!--
+        公式SNS・配信サービスへのリンクを表示する。
+
+        リンク先を変更する場合は
+        data/social.js を編集する。
+      -->
+      <div
+        class="social-links"
+        data-social-links
+      ></div>
+
+    </section>
+
+
+    <!-- ========================================
+         FOOTER / フッター
+    ========================================= -->
+    <footer>
+      © Pizza The Third Choices · MUSIC TABLE
+    </footer>
+
+  </div>
+
+
+  <!-- ==========================================
+       JAVASCRIPT / データと表示処理
+
+       注意：
+       以下の読み込み順は変更しない。
+  =========================================== -->
+
+  <!-- アルバム情報 -->
+  <script src="data/albums.js"></script>
+
+  <!-- 楽曲の基本情報 -->
+  <script src="data/songs.js"></script>
+
+  <!-- 楽曲の解説文 -->
+  <script src="data/descriptions.js"></script>
+
+  <!-- 楽曲の動画情報 -->
+  <script src="data/videos.js"></script>
+
+  <!-- 楽曲表・検索・表示切替・詳細パネルの処理 -->
+  <script src="script.js"></script>
+
+  <!-- 公式SNS・配信サービスのリンク -->
+  <script src="data/social.js"></script>
+
+</body>
+</html>
