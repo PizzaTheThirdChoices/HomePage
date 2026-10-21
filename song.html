@@ -1,1 +1,314 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SONG | PIZZA</title><link rel="stylesheet" href="style.css"></head><body><main class="song-page-layout"><p><a href="index.html" style="color:#ddd">← 楽曲周期表に戻る</a></p><p class="eyebrow">PIZZA THE THIRD CHOICES / SONG DETAIL</p><section id="song-page" class="detail"></section><p class="intro">楽曲の解説・制作背景・音源リンクなどを今後追加できます。</p></main><script src="script.js"></script><script>const id=Number(new URLSearchParams(location.search).get('id'));const s=songs.find(x=>x.number===id);const target=document.querySelector('#song-page');if(s){document.title=s.title+' | PIZZA';const art=imageFor(s,'detail-art');if(art)target.append(art);const body=document.createElement('div');body.className='detail-body';const n=document.createElement('p');n.className='eyebrow';n.textContent=`ELEMENT ${s.number} / ${s.code}`;const h=document.createElement('h2');h.textContent=s.title;const album=document.createElement('p');album.textContent='収録：'+getAlbum(s);const desc=document.createElement('p');desc.textContent=descriptions[s.number]||'楽曲紹介文は準備中です。';body.append(n,h,album,desc);const video=videoFor(s);if(video)body.append(video);target.append(body)}else{target.textContent='楽曲が見つかりませんでした。'}</script></body></html>
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SONG | PIZZA</title>
+
+  <!-- 共通スタイルシート -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ========================================
+       SITE SHELL / ページ全体
+  ========================================= -->
+  <div class="site-shell">
+
+
+    <!-- ========================================
+         HEADER / ナビゲーション
+    ========================================= -->
+    <nav class="top-nav">
+
+      <!-- サイト名・ホームへのリンク -->
+      <a class="wordmark" href="index.html">
+        Pizza The Third Choices
+      </a>
+
+      <!-- ページ移動メニュー -->
+      <div class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="music.html">MUSIC</a>
+        <a href="live.html">LIVE / ARCHIVE</a>
+        <a href="merch.html">MERCH</a>
+      </div>
+
+      <!-- 公式SNS・配信サービスのアイコン -->
+      <!-- data/social.js の設定から自動生成される -->
+      <div
+        class="social-links header-social"
+        data-social-links
+        aria-label="公式SNS・配信ストア"
+      ></div>
+
+    </nav>
+
+
+    <!-- ========================================
+         MAIN / 楽曲詳細ページ
+    ========================================= -->
+    <main>
+
+      <!-- 楽曲表へ戻るリンク -->
+      <p>
+        <a href="music.html" style="color:#ddd">
+          ← 楽曲表に戻る
+        </a>
+      </p>
+
+      <!-- ページ上部の小見出し -->
+      <p class="eyebrow">
+        PIZZA THE THIRD CHOICES / SONG DETAIL
+      </p>
+
+
+      <!-- ======================================
+           SONG DETAIL / 楽曲詳細表示
+      ======================================= -->
+
+      <!--
+        この領域には、ページ下部のJavaScriptによって
+        楽曲情報が自動生成される。
+
+        表示する情報：
+          ・楽曲番号
+          ・楽曲コード
+          ・曲名
+          ・アルバム情報
+          ・楽曲解説
+          ・配信リンク
+          ・関連動画
+
+        URL例：
+          song.html?id=12
+
+        URLの id に対応する楽曲を
+        data/songs.js から検索する。
+      -->
+      <section
+        id="song-page"
+        class="detail"
+      ></section>
+
+
+      <!-- ======================================
+           INTRO / 補足説明
+      ======================================= -->
+      <p class="intro">
+        楽曲の解説・制作背景・音源リンクなどを今後追加できます。
+      </p>
+
+
+      <!-- ======================================
+           FOLLOW US / 公式SNS
+      ======================================= -->
+      <section class="social-section">
+
+        <h2>FOLLOW US</h2>
+
+        <!-- data/social.js から自動生成 -->
+        <div
+          class="social-links"
+          data-social-links
+        ></div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ==========================================
+       JAVASCRIPT / データの読み込み
+
+       注意：
+       読み込み順は変更しない。
+  =========================================== -->
+
+  <!-- アルバム情報 -->
+  <script src="data/albums.js"></script>
+
+  <!-- 楽曲の基本情報 -->
+  <script src="data/songs.js"></script>
+
+  <!-- 楽曲解説 -->
+  <script src="data/descriptions.js"></script>
+
+  <!-- 関連動画 -->
+  <script src="data/videos.js"></script>
+
+  <!-- 楽曲情報の共通処理 -->
+  <script src="script.js"></script>
+
+
+  <!-- ==========================================
+       SONG DETAIL RENDERING / 楽曲詳細の生成
+  =========================================== -->
+  <script>
+
+    // ----------------------------------------
+    // 1. URLから楽曲番号を取得
+    // ----------------------------------------
+    // 例：song.html?id=12 → 12
+    const id = Number(
+      new URLSearchParams(location.search).get('id')
+    );
+
+
+    // ----------------------------------------
+    // 2. 楽曲データを検索
+    // ----------------------------------------
+    // number がURLの id と一致する楽曲を取得
+    const s = songs.find(
+      x => x.number === id
+    );
+
+
+    // ----------------------------------------
+    // 3. 表示先を取得
+    // ----------------------------------------
+    const target = document.querySelector('#song-page');
+
+
+    // ----------------------------------------
+    // 4. 楽曲が見つかった場合
+    // ----------------------------------------
+    if (s) {
+
+      // ブラウザのタブタイトルを曲名に変更
+      document.title = publicTitle(s) + ' | PIZZA';
+
+
+      // --------------------------------------
+      // 5. ジャケット・アートワーク
+      // --------------------------------------
+      const art = imageFor(s, 'detail-art');
+
+      if (art) {
+        target.append(art);
+      }
+
+
+      // --------------------------------------
+      // 6. 楽曲情報の表示領域
+      // --------------------------------------
+      const body = document.createElement('div');
+      body.className = 'detail-body';
+
+
+      // --------------------------------------
+      // 7. 楽曲番号・コード
+      // --------------------------------------
+      const n = document.createElement('p');
+      n.className = 'eyebrow';
+
+      n.textContent =
+        `ELEMENT ${s.number} / ${publicCode(s)}`;
+
+
+      // --------------------------------------
+      // 8. 楽曲タイトル
+      // --------------------------------------
+      const h = document.createElement('h2');
+      h.textContent = publicTitle(s);
+
+
+      // --------------------------------------
+      // 9. 収録アルバム情報
+      // --------------------------------------
+      const album = document.createElement('p');
+
+      album.textContent =
+        '収録：' +
+        (
+          cassetteOnlyNumbers.has(s.number)
+            ? '33 (1st Tape) / カセット限定'
+            : getAlbum(s)
+        );
+
+
+      // --------------------------------------
+      // 10. 楽曲解説
+      // --------------------------------------
+      const desc = document.createElement('p');
+
+      desc.textContent =
+        isTeaser(s)
+          ? '情報公開をお待ちください。'
+          : (
+              descriptions[s.number] ||
+              '楽曲紹介文は準備中です。'
+            );
+
+
+      // --------------------------------------
+      // 11. 基本情報をページに追加
+      // --------------------------------------
+      body.append(
+        n,
+        h,
+        album,
+        desc
+      );
+
+
+      // --------------------------------------
+      // 12. 音楽配信リンク
+      // --------------------------------------
+      // 未公開曲には配信リンクを表示しない
+      if (!isTeaser(s)) {
+
+        const links = streamingLinks(
+          albumByTitle(s.album)
+        );
+
+        if (links.childElementCount) {
+          body.append(links);
+        }
+
+      }
+
+
+      // --------------------------------------
+      // 13. 関連動画
+      // --------------------------------------
+      // 未公開曲には動画を表示しない
+      const video = isTeaser(s)
+        ? null
+        : videoFor(s);
+
+      if (video) {
+        body.append(video);
+      }
+
+
+      // --------------------------------------
+      // 14. 完成した楽曲詳細をページに追加
+      // --------------------------------------
+      target.append(body);
+
+    } else {
+
+      // --------------------------------------
+      // 15. 楽曲が見つからなかった場合
+      // --------------------------------------
+      target.textContent =
+        '楽曲が見つかりませんでした。';
+
+    }
+
+  </script>
+
+
+  <!-- ========================================
+       SOCIAL LINKS / 公式SNS
+  ========================================= -->
+  <script src="data/social.js"></script>
+
+</body>
+</html>
