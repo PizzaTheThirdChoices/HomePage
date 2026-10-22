@@ -134,14 +134,6 @@ function renderMerch() {
     article.append(gallery);
 
 
-    // ----------------------------------------
-    // 9. 商品説明
-    // ----------------------------------------
-    const desc = document.createElement('p');
-    desc.textContent = item.description;
-
-    article.append(desc);
-
 
     // ----------------------------------------
     // 10. 完成した商品カードをページに追加
