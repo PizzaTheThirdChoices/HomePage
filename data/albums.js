@@ -4,9 +4,9 @@ const albums = [
   {id:'love-at-first-sight',title:'Love at First Sight',color:'#E9B7B6',cover:'assets/albums/love-at-first-sight.png',trackNumbers:[1,2,3,5,24,21,9,8,6,11],links:{spotify:'',appleMusic:'',youtubeMusic:'',other:'https://big-up.style/FhlKcAGNXT'}},
   {id:'inevitable-death',title:'Inevitable Death',color:'#A5D7D2',cover:'assets/albums/inevitable-death.png',trackNumbers:[10,29,7,14,15,18,28,32,20,12],links:{spotify:'',appleMusic:'',youtubeMusic:'',other:'https://big-up.style/sQgQMpnX6s'}},
   {id:'pentagon-pizza-puzzle',title:'Pentagon Pizza Puzzle',color:'#B99B79',cover:'assets/albums/pentagon-pizza-puzzle.png',trackNumbers:[19,26,25,13,34,22,23,4,31,33],links:{spotify:'',appleMusic:'',youtubeMusic:'',other:'https://big-up.style/MnTAFGr5GU'}},
-  {id:'tape-33',title:'33 (1st Tape)',type:'tape',color:'#777777',cover:'assets/albums/33-tape.png',sides:{
+  {id:'tape-33',title:'33 (1st Tape)',type:'tape',color:'#777777',cover:'assets/albums/33-tape.png',cassette:{sideA:'assets/albums/33-side-a.png',sideB:'assets/albums/33-side-b.png'},sides:{
     A:[1,2,3,34,15,18,30,9,8,25,26,5,32,20,12,16,27,11],
-    B:[10,29,7,14,13,4,28,24,21,22,23,6,19,31,33,{type:'live',label:'Live @ 20260829',eventId:'20260829'}]
+    B:[10,29,7,14,13,4,28,24,21,22,23,6,19,31,33,{type:'live',label:'Live音源 (Bonus)',eventId:'20260829'}]
   },bonusNumbers:[30,16,27],links:{spotify:'',appleMusic:'',youtubeMusic:'',other:''}}
 ];
 function albumByTitle(title){return albums.find(a=>a.title===title || (a.id==='love-at-first-sight'&&title==='Love at First Sight'))}

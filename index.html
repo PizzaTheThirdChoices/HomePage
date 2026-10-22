@@ -45,43 +45,30 @@
     ========================================= -->
     <main class="home-main">
       <!-- ======================================
-           HERO / メインビジュアル
+           HERO / アーティスト写真とロゴを重ねる
       ======================================= -->
-      <section class="hero">
-        <p class="eyebrow">
-          PIZZA THE THIRD CHOICES / OFFICIAL WEBSITE
-        </p>
-        <!-- メインロゴ -->
-        <!-- 画像が読み込めない場合は文字タイトルを表示 -->
+      <section class="home-visuals home-hero" aria-label="バンドメインビジュアル">
         <img
-          class="hero-logo"
-          src="assets/logo/logo-white.png"
-          alt="Pizza The Third Choices"
-          onerror="this.hidden=true;this.nextElementSibling.hidden=false"
-        >
-        <h1 hidden>Pizza The Third Choices</h1>
-        <p class="hero-caption">
-          MUSIC / LIVE / ARCHIVE
-        </p>
-        <!-- メインリンク -->
-        <div class="hero-actions">
-          <a href="music.html">EXPLORE THE MUSIC ↗</a>
-          <a href="live.html">LIVE & ARCHIVE ↗</a>
-        </div>
-      </section>
-      <!-- ======================================
-           ARTIST VISUALS / アー写・追加ロゴ
-      ======================================= -->
-      <section class="home-visuals">
-        <!-- 横長アーティスト写真 -->
-        <!-- 画像が存在しない場合はセクション全体を非表示 -->
-        <img
+          class="home-artist-photo"
           src="assets/photos/artist-wide.webp"
           alt="Pizza The Third Choices アーティスト写真"
-          onerror="this.closest('.home-visuals').hidden=true"
+          onerror="this.hidden=true;this.closest('.home-hero').classList.add('photo-unavailable')"
         >
-        <!-- 追加ロゴ -->
-        <!-- 画像が存在しない場合はロゴのみ非表示 -->
+        <div class="home-hero-overlay">
+          <p class="eyebrow">PIZZA THE THIRD CHOICES / OFFICIAL WEBSITE</p>
+          <img
+            class="hero-logo"
+            src="assets/logo/logo-white.png"
+            alt="Pizza The Third Choices"
+            onerror="this.hidden=true;this.nextElementSibling.hidden=false"
+          >
+          <h1 hidden>Pizza The Third Choices</h1>
+          <p class="hero-caption">MUSIC / LIVE / ARCHIVE</p>
+          <div class="hero-actions">
+            <a href="music.html">EXPLORE THE MUSIC ↗</a>
+            <a href="live.html">LIVE & ARCHIVE ↗</a>
+          </div>
+        </div>
         <img
           class="home-extra-logo"
           src="assets/logo/logo-Saski.webp"
@@ -109,34 +96,18 @@
       <!-- ======================================
            FEATURE LINKS / 主要コンテンツ
       ======================================= -->
-      <section class="home-sections">
-        <!-- MUSIC / 楽曲表 -->
-        <a class="feature-tile" href="music.html">
-          <span class="eyebrow">
-            01 / DISCOGRAPHY
-          </span>
-          <h2>
-            MUSIC<br>
-            PERIODIC TABLE
-          </h2>
-          <p>
-            Pizza The Third Choicesの全ての楽曲を、一つの表に。
-          </p>
-          <span>EXPLORE ↗</span>
+      <section class="home-sections home-feature-grid" aria-label="主要コンテンツ">
+        <a class="feature-tile feature-listen" href="#home-releases">
+          <h2>LISTEN</h2>
         </a>
-        <!-- LIVE / ライブアーカイブ -->
-        <a class="feature-tile" href="live.html">
-          <span class="eyebrow">
-            02 / EVENTS
-          </span>
-          <h2>
-            LIVE<br>
-            ARCHIVE
-          </h2>
-          <p>
-            これからの公演と、これまでの記録。
-          </p>
-          <span>VIEW EVENTS ↗</span>
+        <a class="feature-tile feature-merch" href="merch.html">
+          <h2>MERCH</h2>
+        </a>
+        <a class="feature-tile feature-music" href="music.html">
+          <h2>MUSIC<br>TABLE</h2>
+        </a>
+        <a class="feature-tile feature-events" href="live.html">
+          <h2>LIVE<br>ARCHIVE</h2>
         </a>
       </section>
       <!-- ======================================
