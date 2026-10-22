@@ -350,7 +350,7 @@
   background-image: url("assets/albums/love-at-first-sight.png");
 }
 .home-feature-grid .feature-merch::before {
-  background-image: url("assets/merch/t-shirt.png");
+  background-image: url("assets/merch/Tshirt-PizZala-1.webp");
 }
 @media (max-width: 650px) {
   .home-feature-grid { gap: 10px; }
