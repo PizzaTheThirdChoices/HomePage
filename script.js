@@ -96,30 +96,101 @@ function renderCreationGrid(q){
 function renderAlbumGrid(q){
  const used=new Set();
  for(const release of albums){
-   const section=document.createElement('section');section.className='album-group';
-   const heading=document.createElement('h2');heading.className='album-group-title';heading.textContent=release.title;
-   section.append(heading,streamingLinks(release));
-   const groups=release.sides?Object.entries(release.sides):[['',release.trackNumbers]];
-   for(const [side,tracks] of groups){
-     if(side){const sub=document.createElement('h3');sub.className='release-side';sub.textContent='SIDE '+side;section.append(sub)}
-     const grid=document.createElement('div');grid.className='album-song-grid';
-     tracks.forEach((entry,i)=>{
-       const wrap=document.createElement('div');wrap.className='album-song-wrap';
-       if(typeof entry==='object'){
-         const special=document.createElement('a');special.className='element album-element special-track';special.href='event.html?id='+encodeURIComponent(entry.eventId);
-         special.textContent=entry.label;special.title='ライブ記録へ';wrap.append(special);
-       }else{
-         const song=songs[entry-1];if(!song)return;
-         used.add(entry);const cell=createCell(song,q);cell.classList.add('album-element');wrap.append(cell);
-         if(release.bonusNumbers?.includes(entry)){const bonus=document.createElement('span');bonus.className='bonus-tag';bonus.textContent='BONUS';wrap.append(bonus)}
-       }
-       const order=document.createElement('span');order.className='album-track-number';order.textContent=String(i+1).padStart(2,'0');wrap.append(order);grid.append(wrap);
-     });section.append(grid);
+   const section=document.createElement('section');
+   section.className='album-group album-release';
+   const heading=document.createElement('h2');
+   heading.className='album-group-title';
+   heading.textContent=release.title;
+   section.append(heading);
+
+   const layout=document.createElement('div');
+   layout.className='album-release-layout';
+   const artwork=document.createElement('div');
+   artwork.className='album-release-artwork';
+   if(release.cover){
+     const img=document.createElement('img');
+     img.src=release.cover;
+     img.alt=release.title+' ジャケット';
+     img.loading='lazy';
+     img.onerror=()=>img.hidden=true;
+     artwork.append(img);
    }
+   artwork.append(streamingLinks(release));
+   layout.append(artwork);
+
+   const tracksArea=document.createElement('div');
+   tracksArea.className='album-track-lists';
+   const groups=release.sides?Object.entries(release.sides):[['',release.trackNumbers||[]]];
+   for(const [side,tracks] of groups){
+     if(side){
+       const sub=document.createElement('h3');
+       sub.className='release-side';
+       sub.textContent='SIDE '+side;
+       tracksArea.append(sub);
+     }
+     const list=document.createElement('ol');
+     list.className='album-track-list';
+     tracks.forEach((entry,i)=>{
+       const li=document.createElement('li');
+       li.className='album-track-row';
+       const order=document.createElement('span');
+       order.className='album-track-index';
+       order.textContent=String(i+1);
+       li.append(order);
+       if(typeof entry==='object'){
+         const special=document.createElement('a');
+         special.className='album-track-link';
+         special.href='event.html?id='+encodeURIComponent(entry.eventId);
+         special.textContent='Live音源';
+         special.title=entry.label+' / ライブ記録へ';
+         li.append(special);
+         const bonus=document.createElement('span');
+         bonus.className='album-track-bonus';
+         bonus.textContent='Bonus';
+         li.append(bonus);
+       }else{
+         const song=songs[entry-1];
+         if(!song)return;
+         used.add(entry);
+         const link=document.createElement('button');
+         link.type='button';
+         link.className='album-track-link'+(selected===song.number?' is-selected':'')+(q&&!isMatch(song,q)?' dim':'');
+         link.textContent=publicTitle(song);
+         link.onclick=()=>{selected=song.number;render()};
+         li.append(link);
+         if(release.bonusNumbers?.includes(entry)){
+           const bonus=document.createElement('span');
+           bonus.className='album-track-bonus';
+           bonus.textContent='Bonus';
+           li.append(bonus);
+         }
+       }
+       list.append(li);
+     });
+     tracksArea.append(list);
+   }
+   layout.append(tracksArea);
+   section.append(layout);
    table.append(section);
  }
  const remaining=songs.filter(s=>!used.has(s.number));
- if(remaining.length){const section=document.createElement('section');section.className='album-group';const heading=document.createElement('h2');heading.className='album-group-title';heading.textContent='OTHER / 未収録';const grid=document.createElement('div');grid.className='album-song-grid';remaining.forEach(s=>{const wrap=document.createElement('div');wrap.className='album-song-wrap';wrap.append(createCell(s,q));grid.append(wrap)});section.append(heading,grid);table.append(section)}
+ if(remaining.length){
+   const section=document.createElement('section');
+   section.className='album-group album-other';
+   const heading=document.createElement('h2');
+   heading.className='album-group-title';
+   heading.textContent='OTHER / 未収録';
+   const grid=document.createElement('div');
+   grid.className='album-song-grid';
+   remaining.forEach(song=>{
+     const wrap=document.createElement('div');
+     wrap.className='album-song-wrap';
+     wrap.append(createCell(song,q));
+     grid.append(wrap);
+   });
+   section.append(heading,grid);
+   table.append(section);
+ }
 }
 
 function renderDetail(){
