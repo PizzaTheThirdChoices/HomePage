@@ -333,3 +333,27 @@
   .tape-side-row { grid-template-columns: 1fr; gap: 14px; }
   .tape-side-image { max-width: 340px; margin-inline: auto; }
 }
+
+/* Four prominent home navigation tiles in reading order. */
+.home-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.home-feature-grid .feature-tile {
+  min-height: clamp(170px, 22vw, 280px);
+  justify-content: center;
+  align-items: flex-start;
+}
+.home-feature-grid .feature-tile h2 { margin: 0; position: relative; z-index: 1; }
+.home-feature-grid .feature-listen::before {
+  background-image: url("assets/albums/love-at-first-sight.png");
+}
+.home-feature-grid .feature-merch::before {
+  background-image: url("assets/merch/t-shirt.png");
+}
+@media (max-width: 650px) {
+  .home-feature-grid { gap: 10px; }
+  .home-feature-grid .feature-tile { min-height: 145px; padding: 16px; }
+  .home-feature-grid .feature-tile h2 { font-size: clamp(19px, 5vw, 29px); }
+}
