@@ -115,55 +115,35 @@ function renderAlbumGrid(q){
      img.onerror=()=>img.hidden=true;
      artwork.append(img);
    }
-   if(release.type==='tape'&&release.cassette){
-     const switcher=document.createElement('div');
-     switcher.className='cassette-switcher';
-     switcher.setAttribute('role','group');
-     switcher.setAttribute('aria-label','カセット面の画像を切り替え');
-     const preview=document.createElement('img');
-     preview.className='cassette-side-preview';
-     preview.alt='33 (1st Tape) SIDE A カセット画像';
-     preview.hidden=true;
-     const buttons=document.createElement('div');
-     buttons.className='cassette-side-buttons';
-     const setSide=side=>{
-       const src=release.cassette['side'+side];
-       if(!src)return;
-       preview.hidden=false;
-       preview.src=src;
-       preview.alt=release.title+' SIDE '+side+' カセット画像';
-       buttons.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));
-     };
-     preview.onerror=()=>{
-       preview.hidden=true;
-       switcher.classList.add('cassette-image-pending');
-     };
-     preview.onload=()=>switcher.classList.remove('cassette-image-pending');
-     for(const side of ['A','B']){
-       const button=document.createElement('button');
-       button.type='button';
-       button.dataset.side=side;
-       button.textContent='SIDE '+side;
-       button.setAttribute('aria-pressed',String(side==='A'));
-       button.addEventListener('click',()=>setSide(side));
-       buttons.append(button);
-     }
-     switcher.append(preview,buttons);
-     artwork.append(switcher);
-     setSide('A');
-   }
    artwork.append(streamingLinks(release));
    layout.append(artwork);
+   if(release.type==='tape')layout.classList.add('tape-release-layout');
 
    const tracksArea=document.createElement('div');
    tracksArea.className='album-track-lists';
    const groups=release.sides?Object.entries(release.sides):[['',release.trackNumbers||[]]];
    for(const [side,tracks] of groups){
+     const sideRow=side&&release.type==='tape'?document.createElement('div'):null;
+     const sideTracks=sideRow?document.createElement('div'):tracksArea;
+     if(sideRow){
+       sideRow.className='tape-side-row';
+       const sideImagePath=release.cassette?.['side'+side];
+       if(sideImagePath){
+         const sideImage=document.createElement('img');
+         sideImage.className='tape-side-image';
+         sideImage.src=sideImagePath;
+         sideImage.alt=release.title+' SIDE '+side+' カセット本体';
+         sideImage.loading='lazy';
+         sideImage.onerror=()=>sideImage.hidden=true;
+         sideRow.append(sideImage);
+       }
+       sideTracks.className='tape-side-tracks';
+     }
      if(side){
        const sub=document.createElement('h3');
        sub.className='release-side';
        sub.textContent='SIDE '+side;
-       tracksArea.append(sub);
+       sideTracks.append(sub);
      }
      const list=document.createElement('ol');
      list.className='album-track-list';
@@ -204,7 +184,8 @@ function renderAlbumGrid(q){
        }
        list.append(li);
      });
-     tracksArea.append(list);
+     sideTracks.append(list);
+     if(sideRow){sideRow.append(sideTracks);tracksArea.append(sideRow)}
    }
    layout.append(tracksArea);
    section.append(layout);
