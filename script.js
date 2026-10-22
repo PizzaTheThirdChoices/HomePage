@@ -32,7 +32,7 @@ function publicTitle(s){return isTeaser(s)?'未発表楽曲':s.title}
 // Normalize typography differences without treating user input as a regular expression.
 // Apostrophes (straight/curly), whitespace and other punctuation are ignored.
 function normalizeSearch(text){
- return String(text).normalize('NFKC').toLowerCase().replace(/[\\p{P}\\p{S}\\s]+/gu,'');
+ return String(text).normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu,'');
 }
 function isMatch(s,q){
  if(q==='%')return !isTeaser(s)&&s.title.includes('%');
