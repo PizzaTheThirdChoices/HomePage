@@ -3,7 +3,7 @@ const colors={...Object.fromEntries(albums.map(a=>[a.title,a.color])),'未収録
 const albumImages=Object.fromEntries(albums.map(a=>[a.title,a.cover]));
 const cassetteOnlyNumbers = new Set([16,27,30]);
 const tapeRelease = albums.find(a=>a.id==='tape-33');
-function coverFor(song){return cassetteOnlyNumbers.has(song.number)?tapeRelease?.cover:albumImages[song.album]}
+function coverFor(song){return cassetteOnlyNumbers.has(song.number)?(tapeRelease?.cassette?.sideA||tapeRelease?.cover):albumImages[song.album]}
 function youtubeId(value){
  if(!value)return null;
  try{const u=new URL(value);const host=u.hostname.toLowerCase();
@@ -49,7 +49,7 @@ function songUrl(s){return 'song.html?id='+encodeURIComponent(s.number)}
 
 const table=document.querySelector('#periodic'),detail=document.querySelector('#detail');
 const availableCovers=new Set();
-if(table){[...Object.values(albumImages),tapeRelease?.cover].filter(Boolean).forEach(src=>{const im=new Image();im.onload=()=>{availableCovers.add(src);render()};im.src=src;});}
+if(table){[...Object.values(albumImages),tapeRelease?.cassette?.sideA,tapeRelease?.cover].filter(Boolean).forEach(src=>{const im=new Image();im.onload=()=>{availableCovers.add(src);render()};im.src=src;});}
 function getAlbum(s){return s.album||'未収録'}
 function createCell(song,q){
  const el=document.createElement('button');el.type='button';el.className='element'+(selected===song.number?' selected':'')+(q&&!isMatch(song,q)?' dim':'');el.style.background=colors[getAlbum(song)];el.style.setProperty('--album-color',colors[getAlbum(song)]);
@@ -114,6 +114,43 @@ function renderAlbumGrid(q){
      img.loading='lazy';
      img.onerror=()=>img.hidden=true;
      artwork.append(img);
+   }
+   if(release.type==='tape'&&release.cassette){
+     const switcher=document.createElement('div');
+     switcher.className='cassette-switcher';
+     switcher.setAttribute('role','group');
+     switcher.setAttribute('aria-label','カセット面の画像を切り替え');
+     const preview=document.createElement('img');
+     preview.className='cassette-side-preview';
+     preview.alt='33 (1st Tape) SIDE A カセット画像';
+     preview.hidden=true;
+     const buttons=document.createElement('div');
+     buttons.className='cassette-side-buttons';
+     const setSide=side=>{
+       const src=release.cassette['side'+side];
+       if(!src)return;
+       preview.hidden=false;
+       preview.src=src;
+       preview.alt=release.title+' SIDE '+side+' カセット画像';
+       buttons.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===side)));
+     };
+     preview.onerror=()=>{
+       preview.hidden=true;
+       switcher.classList.add('cassette-image-pending');
+     };
+     preview.onload=()=>switcher.classList.remove('cassette-image-pending');
+     for(const side of ['A','B']){
+       const button=document.createElement('button');
+       button.type='button';
+       button.dataset.side=side;
+       button.textContent='SIDE '+side;
+       button.setAttribute('aria-pressed',String(side==='A'));
+       button.addEventListener('click',()=>setSide(side));
+       buttons.append(button);
+     }
+     switcher.append(preview,buttons);
+     artwork.append(switcher);
+     setSide('A');
    }
    artwork.append(streamingLinks(release));
    layout.append(artwork);
