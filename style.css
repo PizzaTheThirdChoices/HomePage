@@ -164,3 +164,142 @@
     min-width: 0;
   }
 }
+
+
+/* ==========================================================
+   Feature branch: 2026-10 homepage and discography refresh
+   Existing asset paths and all other pages remain unchanged.
+   ========================================================== */
+
+/* Artist photograph is the first HOME content, with both logos overlaid. */
+.home-hero {
+  position: relative;
+  margin: 18px 0 38px;
+  min-height: clamp(340px, 48vw, 640px);
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  background: #151515;
+}
+.home-hero .home-artist-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+  z-index: -2;
+}
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #0008, #0005 40%, #000b);
+  z-index: -1;
+}
+.home-hero-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 38px 24px 85px;
+  max-width: 100%;
+}
+.home-hero .hero-logo { width: min(70vw, 580px); max-height: 220px; }
+.home-hero .hero-actions a { background: #0008; }
+.home-hero .home-extra-logo { z-index: 2; }
+.home-hero.photo-unavailable { background: #202020; }
+
+/* Destination imagery is deliberately subtle and never blocks navigation. */
+.feature-tile { position: relative; isolation: isolate; overflow: hidden; }
+.feature-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  opacity: .16;
+  filter: grayscale(100%);
+  pointer-events: none;
+}
+.feature-music::before { background-image: url("assets/albums/pentagon-pizza-puzzle.png"); }
+.feature-events::before { background-image: url("assets/events/261108-PerfectPizzaParty.webp"); }
+
+/* Larger creation-order tiles, keeping the original 8-column geometry. */
+.periodic:not(.album-layout) { min-width: 880px; gap: 9px; }
+.periodic:not(.album-layout) .element { padding: 10px; }
+
+/* Release pages: cover + streaming links left, vertical track list right. */
+.periodic.album-layout { min-width: 0; }
+.album-release-layout {
+  display: grid;
+  grid-template-columns: minmax(170px, 36%) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 46px);
+  align-items: start;
+}
+.album-release-artwork img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid #555;
+}
+.album-release-artwork .streaming-links {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.album-track-lists { min-width: 0; }
+.album-track-list { list-style: none; padding: 0; margin: 0 0 24px; }
+.album-track-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  min-height: 54px;
+  padding: 9px 12px 9px 0;
+  border-bottom: 1px solid #383838;
+  font: 15px Arial, sans-serif;
+}
+.album-track-index { color: #8c8c8c; text-align: right; font-variant-numeric: tabular-nums; }
+.album-track-link {
+  display: block;
+  min-width: 0;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: #f3f1ed;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.album-track-link:hover,.album-track-link:focus-visible { text-decoration: underline; }
+.album-track-link.is-selected { font-weight: bold; }
+.album-track-link.dim { opacity: .25; }
+.album-track-bonus { color: #aaa; font: 11px Arial,sans-serif; white-space: nowrap; }
+.release-side { margin: 22px 0 8px; }
+.album-other .album-song-grid {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+.album-other .element { aspect-ratio: 1; min-height: 100px; }
+
+/* Merch: two columns on desktop/tablet, one on phones. */
+.merch-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 950px) and (min-width: 651px) {
+  .merch-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .home-hero { min-height: 330px; margin-top: 12px; }
+  .home-hero-overlay { padding: 28px 12px 82px; }
+  .home-hero .hero-logo { width: 88%; max-height: 150px; }
+  .home-hero .home-extra-logo { width: 28%; }
+  .album-release-layout { grid-template-columns: 1fr; gap: 16px; }
+  .album-release-artwork { max-width: 340px; width: 100%; margin: auto; }
+  .album-track-row { min-height: 49px; font-size: 14px; }
+  .album-other .album-song-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .merch-items { grid-template-columns: 1fr; }
+}
