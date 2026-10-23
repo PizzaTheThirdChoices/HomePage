@@ -29,7 +29,15 @@ let displayMode='creation';
 function isTeaser(s){return unreleasedNumbers.includes(s.number)}
 function publicCode(s){return isTeaser(s)?'???':(s.code||'—')}
 function publicTitle(s){return isTeaser(s)?'未発表楽曲':s.title}
-function isMatch(s,q){return !q||`${s.number} ${isTeaser(s)?'':s.title} ${publicCode(s)}`.toLowerCase().includes(q)}
+// Normalize typography differences without treating user input as a regular expression.
+// Apostrophes (straight/curly), whitespace and other punctuation are ignored.
+function normalizeSearch(text){
+ return String(text).normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu,'');
+}
+function isMatch(s,q){
+ if(q==='%')return !isTeaser(s)&&s.title.includes('%');
+ return !q||normalizeSearch(`${s.number} ${isTeaser(s)?'':s.title} ${publicCode(s)}`).includes(q);
+}
 function orderedAlbumSongs(album){const a=songs.filter(s=>getAlbum(s)===album);const order=albumTrackOrder[album]||[];return a.sort((x,y)=>{const ix=order.indexOf(x.number),iy=order.indexOf(y.number);return (ix<0?1000+x.number:ix)-(iy<0?1000+y.number:iy)})}
 
 const iconPaths={
@@ -63,7 +71,8 @@ function createCell(song,q){
  el.append(num,sym,marks,tip);el.onclick=()=>{selected=song.number;render()};return el;
 }
 function render(){
- const q=document.querySelector('#search').value.trim().toLowerCase();table.replaceChildren();
+ const input=document.querySelector('#search').value.trim();
+ const q=input==='%'?'%':normalizeSearch(input);table.replaceChildren();
  table.classList.toggle('album-layout',displayMode==='album');
  if(displayMode==='album'){renderAlbumGrid(q)}else{renderCreationGrid(q)}
  renderDetail();
