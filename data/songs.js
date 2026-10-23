@@ -44,7 +44,7 @@ const raw = [
 ['Ghost Town','GTO','',43,''],
 ['New Town','NTO','',42,''],
 ['Galaxy Colosseum IV','GCIV','','','Galaxy Colosseum'],
-['Rush Hour','RSH','','',''],
+['Rush Hour','RSH','','','Traffic'],
 ['Jump to Heaven','JTH','','',''],
 ['No Picnic','NPC','','','']
 ];
