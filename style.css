@@ -563,6 +563,13 @@
  text-align:center;
 }
 
+/* Round the Saski logo on desktop and mobile; other logos are unaffected. */
+.home-hero .home-extra-logo {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 /* Keep the secondary HOME logo below the navigation buttons on phones. */
 @media (max-width: 650px) {
   .home-hero {
@@ -581,11 +588,8 @@
     position: static;
     align-self: flex-end;
     width: 20%;
-    aspect-ratio: 1 / 1;
     height: auto;
     max-height: none;
-    object-fit: cover;
-    border-radius: 50%;
     margin: 0 4% 12px 0;
     pointer-events: none;
   }
