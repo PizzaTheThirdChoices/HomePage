@@ -8,7 +8,7 @@
   <title>SONG | PIZZA</title>
 
   <!-- 共通スタイルシート -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261028-related-videos">
 </head>
 
 <body>
@@ -140,10 +140,10 @@
   <script src="data/descriptions.js"></script>
 
   <!-- 関連動画 -->
-  <script src="data/videos.js"></script>
+  <script src="data/videos.js?v=20261028-related-videos"></script>
 
   <!-- 楽曲情報の共通処理 -->
-  <script src="script.js"></script>
+  <script src="script.js?v=20261028-related-videos"></script>
 
 
   <!-- ==========================================
@@ -284,6 +284,12 @@
 
       if (video) {
         body.append(video);
+      }
+
+      // 通常の関連動画は、楽曲解説Shortsとは別に複数表示する。
+      const related = isTeaser(s) ? null : relatedVideosFor(s);
+      if (related) {
+        body.append(related);
       }
 
 
