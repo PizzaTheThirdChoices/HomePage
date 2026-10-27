@@ -121,8 +121,17 @@ function renderCreationGrid(q){
    group.style.gridRow=`${a.row+1} / span ${dir==='down'?2:1}`;
    group.setAttribute('role','group');group.setAttribute('aria-label',`${publicTitle(song)} と ${publicTitle(other)} の対曲`);
    const first=createCell(song,q),second=createCell(other,q);first.classList.add('pair-first');second.classList.add('pair-second');
+   // Keep pair tooltips outside the clipped buttons so they can extend beyond the frame.
+   const firstTooltip=first.querySelector('.tooltip');
+   const secondTooltip=second.querySelector('.tooltip');
+   firstTooltip?.remove();
+   secondTooltip?.remove();
+   if(firstTooltip)firstTooltip.classList.add('pair-tooltip-first');
+   if(secondTooltip)secondTooltip.classList.add('pair-tooltip-second');
    group.append(first,second);
    const line=document.createElement('span');line.className='pair-divider';line.setAttribute('aria-hidden','true');group.append(line);
+   if(firstTooltip)group.append(firstTooltip);
+   if(secondTooltip)group.append(secondTooltip);
    // Only the matched half receives search emphasis, never the entire pair border.
    group.classList.toggle('pair-searching',Boolean(q));
    table.append(group);consumed.add(other.number);
@@ -251,9 +260,38 @@ function renderAlbumGrid(q){
  }
 }
 
+// Navigate by production number, independent of the table's current view or search.
+function navigateDetail(step){
+ const index=songs.findIndex(song=>song.number===selected);
+ const next=songs[index+step];
+ if(!next)return;
+ selected=next.number;
+ render();
+ detail.scrollTop=0;
+}
+function detailNavigation(){
+ const nav=document.createElement('nav');
+ nav.className='detail-navigation';
+ nav.setAttribute('aria-label','楽曲詳細の前後移動');
+ const prev=document.createElement('button');
+ prev.type='button';prev.className='detail-nav-button';
+ prev.textContent='← PREV';prev.setAttribute('aria-label','前の楽曲');
+ prev.disabled=selected===songs[0].number;
+ prev.onclick=()=>navigateDetail(-1);
+ const count=document.createElement('span');
+ count.className='detail-nav-count';
+ count.textContent=selected+' / '+songs.length;
+ const next=document.createElement('button');
+ next.type='button';next.className='detail-nav-button';
+ next.textContent='NEXT →';next.setAttribute('aria-label','次の楽曲');
+ next.disabled=selected===songs[songs.length-1].number;
+ next.onclick=()=>navigateDetail(1);
+ nav.append(prev,count,next);
+ return nav;
+}
 function renderDetail(){
  const s=songs.find(s=>s.number===selected);if(!s)return;detail.replaceChildren();
- const top=document.createElement('div');top.className='detail-top';const eyebrow=document.createElement('span');eyebrow.className='eyebrow';eyebrow.textContent=`No. ${s.number} / ${publicCode(s)}`;const close=document.createElement('button');close.className='detail-reset';close.textContent='↗';close.title='楽曲詳細ページを開く';close.onclick=()=>location.href=songUrl(s);top.append(eyebrow,close);detail.append(top);
+ const top=document.createElement('div');top.className='detail-top';const eyebrow=document.createElement('span');eyebrow.className='eyebrow';eyebrow.textContent=`No. ${s.number} / ${publicCode(s)}`;const close=document.createElement('button');close.className='detail-reset';close.textContent='↗';close.title='楽曲詳細ページを開く';close.onclick=()=>location.href=songUrl(s);top.append(eyebrow,close);detail.append(top,detailNavigation());
  const heading=document.createElement('div');heading.className='detail-heading';const num=document.createElement('span');num.className='detail-number';num.textContent=s.number;const titleWrap=document.createElement('div');const h=document.createElement('h2');h.textContent=publicTitle(s);const code=document.createElement('p');code.className='detail-code';code.textContent=publicCode(s);titleWrap.append(h,code);heading.append(num,titleWrap);detail.append(heading);
  const art=imageFor(s,'detail-art');const albumBox=document.createElement('div');albumBox.className='detail-album';const cover=document.createElement('div');cover.className='detail-cover';cover.style.setProperty('--album-color',colors[getAlbum(s)]);if(art)cover.append(art);else cover.textContent='NO ARTWORK';const meta=document.createElement('div');meta.className='detail-album-meta';const cap=document.createElement('small');cap.textContent=cassetteOnlyNumbers.has(s.number)?'カセット限定収録':'収録アルバム';const album=document.createElement('strong');album.textContent=cassetteOnlyNumbers.has(s.number)?'33 (1st Tape)':getAlbum(s);meta.append(cap,album);if(s.note){const note=document.createElement('span');note.textContent=s.note;meta.append(note)}albumBox.append(cover,meta);detail.append(albumBox);const streams=streamingLinks(cassetteOnlyNumbers.has(s.number)?tapeRelease:albumByTitle(s.album));if(streams.childElementCount)detail.append(streams);
  const descSection=document.createElement('section');descSection.className='description-section';const descHeading=document.createElement('h3');descHeading.textContent='楽曲解説';const desc=document.createElement('p');desc.textContent=isTeaser(s)?'情報公開をお待ちください。':(descriptions[s.number]||'楽曲紹介文は準備中です。');descSection.append(descHeading,desc);detail.append(descSection);
@@ -268,5 +306,21 @@ const legend=document.querySelector('#legend');const label=document.createElemen
 const sep=document.createElement('i');sep.className='legend-divider';legend.append(sep);const seriesLabel=document.createElement('strong');seriesLabel.className='legend-label';seriesLabel.textContent='SERIES / MARK';legend.append(seriesLabel);
 for(const [kind,label] of [['traffic','Traffic'],['sleeping','Sleeping'],['galaxy','Galaxy Colosseum'],['cassette','カセット限定']]){const item=document.createElement('span');item.append(icon(kind),document.createTextNode(label));legend.append(item)}
 const pairItem=document.createElement('span');pairItem.className='pair-legend';pairItem.textContent='対曲';legend.append(pairItem);
+// Swipe only on the detail panel; preserve vertical scrolling and embedded media.
+let swipeStart=null;
+detail.addEventListener('touchstart',event=>{
+ if(event.touches.length!==1||event.target.closest('button,a,iframe,input,select,textarea')){swipeStart=null;return;}
+ const touch=event.touches[0];
+ swipeStart={x:touch.clientX,y:touch.clientY};
+},{passive:true});
+detail.addEventListener('touchend',event=>{
+ if(!swipeStart||event.changedTouches.length!==1)return;
+ const touch=event.changedTouches[0];
+ const dx=touch.clientX-swipeStart.x,dy=touch.clientY-swipeStart.y;
+ swipeStart=null;
+ if(Math.abs(dx)<55||Math.abs(dx)<Math.abs(dy)*1.5)return;
+ navigateDetail(dx<0?1:-1);
+},{passive:true});
+detail.addEventListener('touchcancel',()=>{swipeStart=null;},{passive:true});
 document.querySelector('#search').addEventListener('input',render);document.querySelector('#view-mode').addEventListener('change',e=>{displayMode=e.target.value;render()});render();
 }
