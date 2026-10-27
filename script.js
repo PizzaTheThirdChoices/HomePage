@@ -23,6 +23,37 @@ function videoFor(song){const id=youtubeId(songVideos[song.number]);if(!id)retur
  section.append(h,frame,link);return section;
 }
 
+// Related Shorts are a separate collection from the single song-explanation video.
+function relatedVideosFor(song){
+ const urls=typeof relatedSongVideos==='undefined'?[]:(relatedSongVideos[song.number]||[]);
+ const entries=urls.map(url=>({url,id:youtubeId(url)})).filter(entry=>entry.id);
+ if(!entries.length)return null;
+ const section=document.createElement('section');
+ section.className='related-video-section';
+ const heading=document.createElement('h3');
+ heading.textContent='RELATED VIDEOS / 関連動画';
+ const list=document.createElement('div');
+ list.className='related-video-list';
+ list.setAttribute('aria-label',song.title+' の関連動画');
+ entries.forEach(({id},index)=>{
+  const card=document.createElement('div');card.className='related-video-card';
+  const frame=document.createElement('iframe');
+  frame.className='related-video-player';
+  frame.src='https://www.youtube-nocookie.com/embed/'+id;
+  frame.title=song.title+' 関連動画 '+(index+1);
+  frame.loading='lazy';
+  frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  frame.allowFullscreen=true;
+  const link=document.createElement('a');
+  link.href='https://www.youtube.com/watch?v='+id;
+  link.target='_blank';link.rel='noopener noreferrer';
+  link.textContent='YouTubeで見る ↗';
+  card.append(frame,link);list.append(card);
+ });
+ section.append(heading,list);
+ return section;
+}
+
 const lengths=[2,...Array(Math.max(12,Math.ceil((songs.length-2)/8))).fill(8)]; // first row: left and right; subsequent rows sequentially filled
 let selected=3;
 let displayMode='creation';
@@ -228,6 +259,7 @@ function renderDetail(){
  const descSection=document.createElement('section');descSection.className='description-section';const descHeading=document.createElement('h3');descHeading.textContent='楽曲解説';const desc=document.createElement('p');desc.textContent=isTeaser(s)?'情報公開をお待ちください。':(descriptions[s.number]||'楽曲紹介文は準備中です。');descSection.append(descHeading,desc);detail.append(descSection);
  if(s.pair&&!isTeaser(s)){const p=document.createElement('button');p.className='pair-jump';p.textContent=`対曲 No.${s.pair} / ${publicTitle(songs[s.pair-1])}`;p.onclick=()=>{selected=s.pair;render()};detail.append(p)}
  const video=isTeaser(s)?null:videoFor(s);if(video)detail.append(video);
+ const related=isTeaser(s)?null:relatedVideosFor(s);if(related)detail.append(related);
  const link=document.createElement('a');link.className='detail-page-link';link.href=songUrl(s);link.textContent='楽曲詳細ページへ ↗';detail.append(link);
 
 }
