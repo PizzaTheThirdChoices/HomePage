@@ -522,3 +522,43 @@
 .detail-nav-button:hover:not(:disabled),.detail-nav-button:focus-visible {background:#444;outline:1px solid #eee;}
 .detail-nav-button:disabled {opacity:.3;cursor:default;}
 .detail-nav-count {color:#aaa;font-variant-numeric:tabular-nums;}
+
+/* Related videos are independent of the one-per-song explanation Shorts. */
+.related-video-section {
+ border-top:1px solid #444;
+ margin-top:22px;
+ padding-top:18px;
+}
+.related-video-section h3 {
+ font-size:16px;
+ font-weight:400;
+ margin:0 0 14px;
+}
+.related-video-list {
+ display:flex;
+ gap:12px;
+ overflow-x:auto;
+ scroll-snap-type:x proximity;
+ padding:0 0 12px;
+}
+.related-video-card {
+ flex:0 0 min(80%,220px);
+ min-width:0;
+ scroll-snap-align:start;
+ display:flex;
+ flex-direction:column;
+ gap:8px;
+}
+.related-video-player {
+ display:block;
+ width:100%;
+ aspect-ratio:9/16;
+ border:1px solid #555;
+ border-radius:5px;
+ background:#222;
+}
+.related-video-card a {
+ font:12px Arial,sans-serif;
+ color:#eee;
+ text-align:center;
+}
