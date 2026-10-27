@@ -409,7 +409,7 @@
   width: 100%;
   height: 100%;
   aspect-ratio: auto;
-  overflow: hidden;
+  overflow: visible;
   border-color: #ddd;
 }
 .periodic:not(.album-layout) .pair-unit .element {
@@ -421,6 +421,23 @@
   border-radius: 0;
   outline: none;
   transition: filter .16s;
+}
+/* Pair tooltips live beside (not inside) the clipped buttons. */
+.periodic:not(.album-layout) .pair-unit > .tooltip {
+  z-index: 50;
+  bottom: calc(100% + 12px);
+}
+.periodic:not(.album-layout) .pair-horizontal > .pair-tooltip-first { left: 25%; }
+.periodic:not(.album-layout) .pair-horizontal > .pair-tooltip-second { left: 75%; }
+.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-first { left: 50%; bottom: calc(50% + 12px); }
+.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-second { left: 50%; bottom: calc(100% + 12px); }
+.periodic:not(.album-layout) .pair-first:is(:hover, :focus-visible) ~ .pair-tooltip-first,
+.periodic:not(.album-layout) .pair-second:is(:hover, :focus-visible) ~ .pair-tooltip-second {
+  opacity: 1;
+  visibility: visible;
+}
+@media (hover: none) {
+  .periodic:not(.album-layout) .pair-unit > .tooltip { display: none; }
 }
 /* Two quadrilaterals share the angled boundary; clip-path also clips clicks. */
 .periodic:not(.album-layout) .pair-horizontal .pair-first {
