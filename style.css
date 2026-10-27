@@ -562,3 +562,27 @@
  color:#eee;
  text-align:center;
 }
+
+/* HOME secondary logo: circular crop in the upper-right corner of the hero. */
+.home-hero .home-extra-logo {
+  position: absolute;
+  top: clamp(12px, 2.5vw, 28px);
+  right: clamp(12px, 2.5vw, 28px);
+  bottom: auto;
+  width: clamp(72px, 13vw, 160px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  max-height: none;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 2;
+  filter: drop-shadow(0 3px 12px #000);
+}
+@media (max-width: 650px) {
+  .home-hero .home-extra-logo {
+    top: 12px;
+    right: 12px;
+    width: clamp(64px, 20vw, 92px);
+  }
+}
