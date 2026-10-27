@@ -581,7 +581,11 @@
     position: static;
     align-self: flex-end;
     width: 20%;
-    max-height: 80px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    max-height: none;
+    object-fit: cover;
+    border-radius: 50%;
     margin: 0 4% 12px 0;
     pointer-events: none;
   }
