@@ -498,3 +498,27 @@
 @media (max-width: 650px) {
   .periodic:not(.album-layout) .pair-unit .element { padding: 2px; }
 }
+
+/* Music detail navigation: visible buttons and swipe hint on mobile. */
+.detail-navigation {
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ margin:16px 0 6px;
+ font:11px Arial,sans-serif;
+ letter-spacing:.08em;
+}
+.detail-nav-button {
+ min-height:40px;
+ padding:9px 12px;
+ border:1px solid #777;
+ border-radius:4px;
+ background:#222;
+ color:#f3f1ed;
+ font:inherit;
+ cursor:pointer;
+}
+.detail-nav-button:hover:not(:disabled),.detail-nav-button:focus-visible {background:#444;outline:1px solid #eee;}
+.detail-nav-button:disabled {opacity:.3;cursor:default;}
+.detail-nav-count {color:#aaa;font-variant-numeric:tabular-nums;}
