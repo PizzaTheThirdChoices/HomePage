@@ -358,6 +358,51 @@
   .home-feature-grid .feature-tile h2 { font-size: clamp(19px, 5vw, 29px); }
 }
 
+/* HOME BIOGRAPHY: native details/summary supports keyboard and touch without JS. */
+.home-biography { margin-top: 38px; margin-bottom: 38px; }
+.home-biography .biography-copy { max-width: 850px; padding: 22px 0 0; }
+.home-biography .biography-copy p {
+  margin: 0 0 18px;
+  font-size: clamp(13px, 1.5vw, 15px);
+  line-height: 1.95;
+  letter-spacing: .025em;
+}
+.biography-more summary {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+  padding: 10px 0;
+  border-bottom: 1px solid #777;
+  font: 12px Arial, sans-serif;
+  letter-spacing: .16em;
+}
+.biography-more summary::-webkit-details-marker { display: none; }
+.biography-more summary:hover { border-color: #fff; }
+.biography-more summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.biography-more[open] > summary { display: none; }
+.biography-close {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 6px;
+  padding: 10px 0;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  border-bottom: 1px solid #777;
+  font: 12px Arial, sans-serif;
+  letter-spacing: .16em;
+}
+.biography-close:hover { border-bottom-color: #fff; }
+.biography-close:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.biography-more-content { padding-top: 20px; }
+@media (max-width: 650px) {
+  .home-biography { margin-top: 28px; margin-bottom: 30px; }
+  .home-biography .biography-copy { padding-top: 18px; }
+  .home-biography .biography-copy p { font-size: 13px; line-height: 1.85; }
+}
+
 /* V14: paired tracks retain a rectangular frame and trapezoid hit areas.
    The divider only crosses the center seam, preserving room for cover art. */
 .periodic:not(.album-layout) .pair-unit {

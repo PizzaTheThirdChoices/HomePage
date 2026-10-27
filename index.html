@@ -77,6 +77,30 @@
         >
       </section>
       <!-- ======================================
+           BIOGRAPHY / バンド紹介
+           冒頭2段落を常時表示し、以降を展開できる。
+      ======================================= -->
+      <section class="home-biography" aria-labelledby="home-biography-title">
+        <div class="section-bar">
+          <h2 id="home-biography-title">BIOGRAPHY</h2>
+        </div>
+        <div class="biography-copy">
+          <p>2024年、地中海の方からはるばるやってきた新進気鋭の3人組バンド、Pizza The Third Choices。全楽曲を1分間で構成する独自のジャンル「Pizza-Core」を掲げて活動している。</p>
+          <p>ポップなベースサウンドとロジカルな歌詞を構築するMarco（Ba.Vo. / Left）、Fender SIXで多彩な音色を奏でるLeonardo（Ba.Vo. / Right）、ハードコアの影響を色濃く受けた奇妙なドラムを鳴らすDonatello（Dr.）。三者三様の異なる方向性が交錯して生まれる楽曲は、国内外の一部で熱狂的な支持を獲得している。</p>
+          <details class="biography-more">
+            <summary>READ MORE ＋</summary>
+            <div class="biography-more-content">
+              <p>2025年12月25日に1st Album『Love at First Sight』、2026年3月14日には2nd Album『Inevitable Death』を配信。オルタナティブの枠組みを超え、実験的なダークポップの要素を取り入れた楽曲を多数収録している。</p>
+              <p>続く2026年6月4日には、戦争へのアンチテーゼをテーマとした「33」、HIP-HOPの影響を受けた「Priority」などを収録した3rd Album『Pentagon Pizza Puzzle』を公開。ジャンルの境界を横断しながら、独自のサウンドと表現を深化させ続けている。</p>
+              <p>2025年には、オリジナルドキュメンタリー映像『Is Pizza The Third Choices?』をYouTubeにて公開。楽曲制作の経緯や、独自のジャンル「Pizza-Core」の実態に迫る内容となっている。</p>
+              <p>ライブ活動においては、2024年よりオルタナティブハードコアバンドHanaoとの共同自主企画『YEAH』を複数回開催。「YEAHみくじ」によるランダムセットリストをはじめ、通常のライブとは一線を画す演出を展開している。</p>
+              <p>2026年11月8日には、©エスパーキックより全33曲とボーナストラックを収録した1st Cassette『33』を発売予定。同日にはリリースパーティの開催も予定している。</p>
+              <button type="button" class="biography-close">CLOSE −</button>
+            </div>
+          </details>
+        </div>
+      </section>
+      <!-- ======================================
            NEXT LIVE / 次回ライブ情報
       ======================================= -->
       <section class="home-live">
@@ -187,6 +211,14 @@
   <script src="data/albums.js"></script>
   <!-- 公式SNS・配信サービス -->
   <script src="data/social.js"></script>
+  <!-- BIOGRAPHY: close from the end of the expanded text. -->
+  <script>
+    const biography = document.querySelector('.biography-more');
+    biography?.querySelector('.biography-close')?.addEventListener('click', () => {
+      biography.open = false;
+      biography.querySelector('summary')?.focus();
+    });
+  </script>
   <!-- ホームページのリリース表示処理 -->
   <script src="releases.js"></script>
 </body>
