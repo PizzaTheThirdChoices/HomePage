@@ -9,6 +9,24 @@
 
   <!-- 共通スタイルシート -->
   <link rel="stylesheet" href="style.css?v=20261028-related-videos">
+  <style>
+    .song-page-layout > .detail-navigation {
+      width: 100%;
+      max-width: none;
+      margin: 12px 0 18px;
+    }
+    .song-page-layout .detail-navigation .detail-nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+    .song-page-layout .detail-navigation .detail-nav-button.is-disabled {
+      opacity: .3;
+      cursor: default;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -179,6 +197,57 @@
 
       // ブラウザのタブタイトルを曲名に変更
       document.title = publicTitle(s) + ' | PIZZA';
+
+
+      // Navigate by production number, matching MUSIC TABLE.
+      const index = songs.findIndex(song => song.number === s.number);
+      const nav = document.createElement('nav');
+      nav.className = 'detail-navigation';
+      nav.setAttribute('aria-label', '楽曲詳細の前後移動');
+      const prev = document.createElement('a');
+      prev.className = 'detail-nav-button';
+      prev.textContent = '← PREV';
+      prev.setAttribute('aria-label', '前の楽曲');
+      const next = document.createElement('a');
+      next.className = 'detail-nav-button';
+      next.textContent = 'NEXT →';
+      next.setAttribute('aria-label', '次の楽曲');
+      for (const [link, song] of [[prev, songs[index - 1]], [next, songs[index + 1]]]) {
+        if (song) {
+          link.href = songUrl(song);
+        } else {
+          link.removeAttribute('href');
+          link.setAttribute('aria-disabled', 'true');
+          link.classList.add('is-disabled');
+        }
+      }
+      const count = document.createElement('span');
+      count.className = 'detail-nav-count';
+      count.textContent = s.number + ' / ' + songs.length;
+      nav.append(prev, count, next);
+      target.before(nav);
+
+      // Swipe on the detail area without intercepting vertical scrolling or media.
+      let touchStart = null;
+      target.addEventListener('touchstart', event => {
+        if (event.touches.length !== 1 || event.target.closest('button, a, iframe, input, select, textarea')) {
+          touchStart = null;
+          return;
+        }
+        const t = event.touches[0];
+        touchStart = { x: t.clientX, y: t.clientY };
+      }, { passive: true });
+      target.addEventListener('touchend', event => {
+        if (!touchStart || event.changedTouches.length !== 1) return;
+        const t = event.changedTouches[0];
+        const dx = t.clientX - touchStart.x;
+        const dy = t.clientY - touchStart.y;
+        touchStart = null;
+        if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        const destination = songs[index + (dx < 0 ? 1 : -1)];
+        if (destination) location.href = songUrl(destination);
+      }, { passive: true });
+      target.addEventListener('touchcancel', () => { touchStart = null; }, { passive: true });
 
 
       // --------------------------------------
