@@ -96,7 +96,7 @@
   --periodic-gap: clamp(2px, .6vw, 7px);
   gap: var(--periodic-gap);
   grid-template-columns: repeat(8, minmax(0, 1fr));
-  grid-auto-rows: minmax(0, calc((100% - 7 * var(--periodic-gap)) / 8));
+  grid-auto-rows: auto; /* square single cells determine the actual row height */
   align-items: stretch;
 }
 .pair-horizontal, .pair-vertical {
@@ -401,4 +401,100 @@
   .home-biography { margin-top: 28px; margin-bottom: 30px; }
   .home-biography .biography-copy { padding-top: 18px; }
   .home-biography .biography-copy p { font-size: 13px; line-height: 1.85; }
+}
+
+/* V14: paired tracks retain a rectangular frame and trapezoid hit areas.
+   The divider only crosses the center seam, preserving room for cover art. */
+.periodic:not(.album-layout) .pair-unit {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  overflow: visible;
+  border-color: #ddd;
+}
+.periodic:not(.album-layout) .pair-unit .element {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: clamp(3px, .65vw, 9px);
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  transition: filter .16s;
+}
+/* Pair tooltips live beside (not inside) the clipped buttons. */
+.periodic:not(.album-layout) .pair-unit > .tooltip {
+  z-index: 50;
+  bottom: calc(100% + 12px);
+}
+.periodic:not(.album-layout) .pair-horizontal > .pair-tooltip-first { left: 25%; }
+.periodic:not(.album-layout) .pair-horizontal > .pair-tooltip-second { left: 75%; }
+.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-first { left: 50%; bottom: calc(50% + 12px); }
+.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-second { left: 50%; bottom: calc(100% + 12px); }
+.periodic:not(.album-layout) .pair-first:is(:hover, :focus-visible) ~ .pair-tooltip-first,
+.periodic:not(.album-layout) .pair-second:is(:hover, :focus-visible) ~ .pair-tooltip-second {
+  opacity: 1;
+  visibility: visible;
+}
+@media (hover: none) {
+  .periodic:not(.album-layout) .pair-unit > .tooltip { display: none; }
+}
+/* Two quadrilaterals share the angled boundary; clip-path also clips clicks. */
+.periodic:not(.album-layout) .pair-horizontal .pair-first {
+  clip-path: polygon(0 0, 58% 0, 42% 100%, 0 100%);
+}
+.periodic:not(.album-layout) .pair-horizontal .pair-second {
+  clip-path: polygon(58% 0, 100% 0, 100% 100%, 42% 100%);
+}
+.periodic:not(.album-layout) .pair-vertical .pair-first {
+  clip-path: polygon(0 0, 100% 0, 100% 42%, 0 58%);
+}
+.periodic:not(.album-layout) .pair-vertical .pair-second {
+  clip-path: polygon(0 58%, 100% 42%, 100% 100%, 0 100%);
+}
+/* White divider follows the same seam for both orientations. */
+.periodic:not(.album-layout) .pair-horizontal .pair-divider {
+  inset: 0;
+  width: auto;
+  height: auto;
+  transform: none;
+  background: #fff;
+  clip-path: polygon(57.6% 0, 58.4% 0, 42.4% 100%, 41.6% 100%);
+}
+.periodic:not(.album-layout) .pair-vertical .pair-divider {
+  inset: 0;
+  width: auto;
+  height: auto;
+  transform: none;
+  background: #fff;
+  clip-path: polygon(0 57.6%, 100% 41.6%, 100% 42.4%, 0 58.4%);
+}
+.periodic:not(.album-layout) .pair-unit .element.selected {
+  outline: none;
+  filter: brightness(1.3);
+}
+.periodic:not(.album-layout) .pair-unit .element.selected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ffffff24;
+  pointer-events: none;
+}
+/* Keep labels near the centers of their respective quadrilaterals. */
+.periodic:not(.album-layout) .pair-horizontal .pair-first .symbol {
+  align-self: flex-start;
+  margin-left: 10%;
+}
+.periodic:not(.album-layout) .pair-horizontal .pair-second .symbol {
+  align-self: flex-end;
+  margin-right: 10%;
+}
+.periodic:not(.album-layout) .pair-horizontal .pair-second .num {
+  align-self: flex-end;
+}
+.periodic:not(.album-layout) .pair-vertical .pair-second .num {
+  align-self: flex-end;
+}
+@media (max-width: 650px) {
+  .periodic:not(.album-layout) .pair-unit .element { padding: 2px; }
 }

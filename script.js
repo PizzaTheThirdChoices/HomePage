@@ -90,8 +90,17 @@ function renderCreationGrid(q){
    group.style.gridRow=`${a.row+1} / span ${dir==='down'?2:1}`;
    group.setAttribute('role','group');group.setAttribute('aria-label',`${publicTitle(song)} と ${publicTitle(other)} の対曲`);
    const first=createCell(song,q),second=createCell(other,q);first.classList.add('pair-first');second.classList.add('pair-second');
+   // Keep pair tooltips outside the clipped buttons so they can extend beyond the frame.
+   const firstTooltip=first.querySelector('.tooltip');
+   const secondTooltip=second.querySelector('.tooltip');
+   firstTooltip?.remove();
+   secondTooltip?.remove();
+   if(firstTooltip)firstTooltip.classList.add('pair-tooltip-first');
+   if(secondTooltip)secondTooltip.classList.add('pair-tooltip-second');
    group.append(first,second);
    const line=document.createElement('span');line.className='pair-divider';line.setAttribute('aria-hidden','true');group.append(line);
+   if(firstTooltip)group.append(firstTooltip);
+   if(secondTooltip)group.append(secondTooltip);
    // Only the matched half receives search emphasis, never the entire pair border.
    group.classList.toggle('pair-searching',Boolean(q));
    table.append(group);consumed.add(other.number);
