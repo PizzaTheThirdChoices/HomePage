@@ -570,17 +570,23 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+    min-height: 0;
   }
   .home-hero-overlay {
     width: 100%;
-    padding-bottom: 24px;
+    padding-top: 20px;
+    padding-bottom: 12px;
   }
   .home-hero .home-extra-logo {
     position: static;
     align-self: flex-end;
-    width: 28%;
-    max-height: 110px;
-    margin: 0 4% 18px 0;
+    width: 20%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    max-height: none;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 4% 12px 0;
     pointer-events: none;
   }
 }
