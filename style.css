@@ -565,7 +565,10 @@
 
 /* Round the Saski logo on desktop and mobile; other logos are unaffected. */
 .home-hero .home-extra-logo {
+  width: min(28%, 150px);
+  height: auto;
   aspect-ratio: 1 / 1;
+  max-height: none;
   object-fit: cover;
   border-radius: 50%;
 }
@@ -589,7 +592,6 @@
     align-self: flex-end;
     width: 20%;
     height: auto;
-    max-height: none;
     margin: 0 4% 12px 0;
     pointer-events: none;
   }
