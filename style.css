@@ -562,3 +562,25 @@
  color:#eee;
  text-align:center;
 }
+
+/* Keep the secondary HOME logo below the navigation buttons on phones. */
+@media (max-width: 650px) {
+  .home-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+  .home-hero-overlay {
+    width: 100%;
+    padding-bottom: 24px;
+  }
+  .home-hero .home-extra-logo {
+    position: static;
+    align-self: flex-end;
+    width: 28%;
+    max-height: 110px;
+    margin: 0 4% 18px 0;
+    pointer-events: none;
+  }
+}
