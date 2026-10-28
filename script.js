@@ -119,6 +119,8 @@ function renderCreationGrid(q){
    const other=songs[song.pair-1];const group=document.createElement('div');group.className='pair-unit '+(dir==='right'?'pair-horizontal':'pair-vertical');
    group.style.gridColumn=`${a.col+1} / span ${dir==='right'?2:1}`;
    group.style.gridRow=`${a.row+1} / span ${dir==='down'?2:1}`;
+   // Pair frame uses its shared album color, including while filtering.
+   group.style.setProperty('--pair-color',colors[getAlbum(song)]||colors['未収録']);
    group.setAttribute('role','group');group.setAttribute('aria-label',`${publicTitle(song)} と ${publicTitle(other)} の対曲`);
    const first=createCell(song,q),second=createCell(other,q);first.classList.add('pair-first');second.classList.add('pair-second');
    // Keep pair tooltips outside the clipped buttons so they can extend beyond the frame.

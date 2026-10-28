@@ -686,3 +686,25 @@
     top: 2px;
   }
 }
+
+/* Pair frames use album colors rather than a bright white search outline.
+   Applied on both desktop and mobile, regardless of search state. */
+.periodic:not(.album-layout) .pair-unit,
+.periodic:not(.album-layout) .pair-unit.pair-searching {
+  border-color: var(--pair-color, #999999) !important;
+}
+
+/* On phones, keep the first song code centered in the LEFT half of
+   horizontal pairs; avoid inherited flex alignment and margin offsets. */
+@media (max-width: 650px) {
+  .periodic:not(.album-layout) .pair-horizontal .pair-first .symbol {
+    position: absolute;
+    top: 53%;
+    left: 25%;
+    right: auto;
+    margin: 0;
+    align-self: auto;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
