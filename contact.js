@@ -26,7 +26,7 @@
 
   window.addEventListener('message', event => {
     if (!pending || !event.data || event.data.type !== 'pttc-contact-result') return;
-    if (!/^https:\/\/([a-z0-9-]+\.)?(googleusercontent\.com|google\.com)$/.test(event.origin)) return;
+    if (!/^https:\/\/(?:[a-z0-9-]+\.)*(?:googleusercontent\.com|google\.com)$/.test(event.origin)) return;
     if (event.data.token !== pending) return;
     pending = null;
     button.disabled = false;

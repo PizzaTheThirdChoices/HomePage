@@ -57,9 +57,13 @@ function respond_(ok, token) {
     ok: !!ok,
     token: String(token || '')
   }).replace(/</g, '\\u003c');
-  // A GAS HtmlService response may be hosted inside a Google wrapper frame.
-  const html = '<!doctype html><meta charset="utf-8"><script>' +
-    'window.top.postMessage(' + payload + ', "*");' +
-    '</script>';
+  // HtmlService may run inside a nested Google-hosted iframe.
+  // Dispatch to all accessible ancestors so the outer contact page receives it.
+  const html = '<!doctype html><html><head><meta charset="utf-8"></head><body>' +
+    '<script>(function(){var msg=' + payload + ';' +
+    'var current=window;while(current!==current.parent){' +
+    'current=current.parent;current.postMessage(msg,"*");' +
+    '}' +
+    '})();<\/script></body></html>';
   return HtmlService.createHtmlOutput(html);
 }
