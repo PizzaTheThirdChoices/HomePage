@@ -622,8 +622,9 @@
   .periodic:not(.album-layout) > .element {
     padding: 2px;
   }
+  /* Preserve tooltips outside the pair frame; buttons retain clipped hit areas. */
   .periodic:not(.album-layout) .pair-unit {
-    overflow: hidden;
+    overflow: visible;
   }
   /* Each paired button occupies the complete rectangular frame for its
      trapezoid hit area; labels are positioned within the correct half. */
