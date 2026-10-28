@@ -1,34 +1,68 @@
-// Set the public Formspree form ID in contact.html (data-formspree-id).
+// GitHub Pages cannot read cross-origin GAS responses directly.
+// Submit to a hidden iframe and accept an explicit nonce-matched response.
 (() => {
   const form = document.querySelector('#contact-form');
   if (!form) return;
-  const submit = form.querySelector('button[type="submit"]');
+  const button = form.querySelector('button[type="submit"]');
   const status = document.querySelector('#contact-status');
-  const id = (form.dataset.formspreeId || '').trim();
-  if (!/^[a-zA-Z0-9]{8,}$/.test(id)) return;
-  submit.disabled = false;
+  const endpoint = (form.dataset.gasUrl || '').trim();
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) return;
+
+  const frame = document.createElement('iframe');
+  frame.name = 'pttc-contact-response';
+  frame.title = 'お問い合わせ送信処理';
+  frame.style.display = 'none';
+  document.body.append(frame);
+  form.method = 'POST';
+  form.action = endpoint;
+  form.target = frame.name;
+  let tokenField = document.createElement('input');
+  tokenField.type = 'hidden';
+  tokenField.name = 'request_token';
+  form.append(tokenField);
+  let pending = null;
+  button.disabled = false;
   status.textContent = '';
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
-    submit.disabled = true;
-    status.textContent = '送信中です…';
-    status.dataset.state = '';
-    try {
-      const response = await fetch('https://formspree.io/f/' + encodeURIComponent(id), {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' }
-      });
-      if (!response.ok) throw new Error('Submission failed');
+
+  window.addEventListener('message', event => {
+    if (!pending || !event.data || event.data.type !== 'pttc-contact-result') return;
+    if (!/^https:\/\/([a-z0-9-]+\.)?(googleusercontent\.com|google\.com)$/.test(event.origin)) return;
+    if (event.data.token !== pending) return;
+    pending = null;
+    button.disabled = false;
+    button.textContent = 'SEND MESSAGE ↗';
+    if (event.data.ok === true) {
       form.reset();
       status.dataset.state = 'success';
-      status.textContent = '送信しました。お問い合わせありがとうございます。';
-    } catch (_) {
+      status.textContent = 'お問い合わせを受け付けました。ありがとうございます。';
+    } else {
       status.dataset.state = 'error';
-      status.textContent = '送信できませんでした。メールから直接お問い合わせください。';
-    } finally {
-      submit.disabled = false;
+      status.textContent = '送信を確認できませんでした。メールで直接お問い合わせください。';
     }
+  });
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    if (!form.reportValidity() || pending) return;
+    if (form.elements.namedItem('_gotcha')?.value) return;
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    pending = Array.from(bytes, n => n.toString(16).padStart(2, '0')).join('');
+    tokenField.value = pending;
+    button.disabled = true;
+    button.textContent = 'SENDING...';
+    status.dataset.state = '';
+    status.textContent = '送信中です…';
+    form.submit();
+    // Do not claim success when no confirmed GAS response arrives.
+    const attempt = pending;
+    setTimeout(() => {
+      if (pending !== attempt) return;
+      pending = null;
+      button.disabled = false;
+      button.textContent = 'SEND MESSAGE ↗';
+      status.dataset.state = 'error';
+      status.textContent = '送信結果を確認できませんでした。重複送信せず、メールでお問い合わせください。';
+    }, 20000);
   });
 })();
