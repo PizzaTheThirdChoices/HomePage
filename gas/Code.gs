@@ -47,7 +47,7 @@ function doPost(e) {
       }
 
       // Neutralize spreadsheet formulas entered by anonymous visitors.
-      const safe = value => /^[=+@\\-]/.test(value) ? "'" + value : value;
+      const safe = value => /^[=+@-]/.test(value) ? "'" + value : value;
       sheet.appendRow([new Date(), safe(name), safe(email), safe(message), token]);
     } finally {
       lock.releaseLock();
