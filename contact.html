@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101010">
+  <title>CONTACT | Pizza The Third Choices</title>
+  <link rel="stylesheet" href="style.css?v=20261029-formspree">
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="top-nav" aria-label="メインナビゲーション">
+      <a class="wordmark" href="index.html">
+        <img src="assets/logo/Logo-White.png" alt="Pizza The Third Choices" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        <span hidden>Pizza The Third Choices</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">HOME</a>
+        <a href="music.html">MUSIC</a>
+        <a href="live.html">LIVE / ARCHIVE</a>
+        <a href="merch.html">MERCH</a>
+        <a class="active" href="contact.html" aria-current="page">CONTACT</a>
+      </div>
+      <div class="social-links header-social" data-social-links aria-label="公式SNS・配信ストア"></div>
+    </nav>
+    <main class="contact-main">
+      <header class="contact-heading">
+        <p class="eyebrow">PIZZA THE THIRD CHOICES</p>
+        <h1>CONTACT</h1>
+        <p class="contact-subheading">お問い合わせ</p>
+      </header>
+      <div class="contact-layout">
+        <section class="contact-panel" aria-labelledby="contact-form-title">
+          <h2 id="contact-form-title">MESSAGE / お問い合わせ</h2>
+          <p>ご予約、お誘い、ご意見、ご感想等ございましたら、お気軽にご連絡ください。</p>
+          <p lang="en" class="contact-english">For bookings, invitations, feedback, or anything else, please feel free to contact us.</p>
+          <p class="contact-privacy-note">送信内容はお問い合わせへの対応に使用します。詳しくは<a href="privacy.html">プライバシーポリシー</a>をご確認ください。</p>
+          <form id="contact-form" class="contact-form" data-formspree-id="">
+            <label for="contact-name">NAME / お名前 *</label>
+            <input id="contact-name" type="text" name="name" autocomplete="name" maxlength="120" required>
+            <label for="contact-email">EMAIL / 返信先メールアドレス *</label>
+            <input id="contact-email" type="email" name="email" autocomplete="email" maxlength="254" required>
+            <label for="contact-message">MESSAGE / お問い合わせ内容 *</label>
+            <textarea id="contact-message" name="message" rows="8" maxlength="10000" required></textarea>
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="contact-honeypot">
+            <button type="submit" disabled>SEND MESSAGE ↗</button>
+            <p id="contact-status" class="contact-status" role="status" aria-live="polite">フォームは準備中です。メールまたはDMからお問い合わせください。</p>
+          </form>
+        </section>
+        <aside class="contact-direct" aria-labelledby="contact-direct-title">
+          <h2 id="contact-direct-title">DIRECT CONTACT</h2>
+          <p>メールで直接お問い合わせいただくこともできます。</p>
+          <a class="contact-mail-link" href="mailto:pttc0604@gmail.com">pttc0604@gmail.com</a>
+          <h3>SOCIAL / DM</h3>
+          <p>公式SNSのダイレクトメッセージからもご連絡いただけます。</p>
+          <div class="social-links" data-social-links aria-label="公式SNS"></div>
+        </aside>
+      </div>
+    </main>
+    <footer>© Pizza The Third Choices · <a href="contact.html">CONTACT</a> · <a href="privacy.html">PRIVACY POLICY</a></footer>
+  </div>
+  <script src="data/social.js"></script>
+  <script src="contact.js?v=20261029-formspree"></script>
+</body>
+</html>
