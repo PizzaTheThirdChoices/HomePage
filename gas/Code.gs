@@ -27,9 +27,28 @@ function doPost(e) {
       const spreadsheet = SpreadsheetApp.openById(sheetId);
       const sheet = spreadsheet.getSheetByName('Contacts');
       if (!sheet) throw new Error('Create a Contacts sheet first');
+
+      // Idempotency: recognize repeat deliveries after a lost browser response.
+      // The fifth column stores a public random request token, not a password.
+      const lastRow = sheet.getLastRow();
+      if (lastRow > 1) {
+        const existing = sheet.getRange(2, 5, lastRow - 1, 1)
+          .createTextFinder(token).matchEntireCell(true).findNext();
+        if (existing) return respond_(true, token);
+      }
+
+      // Lock makes cache counters safe across simultaneous GAS executions.
+      // Limits are shared by this deployment; no visitor IP is accessible.
+      const cache = CacheService.getScriptCache();
+      const emailKey = 'email:' + digest_(email.toLowerCase());
+      if (!allowRequest_(cache, 'global', 30, 3600) ||
+          !allowRequest_(cache, emailKey, 3, 600)) {
+        return respond_(false, token);
+      }
+
       // Neutralize spreadsheet formulas entered by anonymous visitors.
-      const safe = value => /^[=+@\-]/.test(value) ? "'" + value : value;
-      sheet.appendRow([new Date(), safe(name), safe(email), safe(message)]);
+      const safe = value => /^[=+@\\-]/.test(value) ? "'" + value : value;
+      sheet.appendRow([new Date(), safe(name), safe(email), safe(message), token]);
     } finally {
       lock.releaseLock();
     }
@@ -51,6 +70,18 @@ function doPost(e) {
   }
 }
 
+function digest_(value) {
+  const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, value);
+  return Utilities.base64EncodeWebSafe(bytes);
+}
+
+function allowRequest_(cache, key, maxCount, windowSeconds) {
+  const current = Number(cache.get(key) || 0);
+  if (current >= maxCount) return false;
+  cache.put(key, String(current + 1), windowSeconds);
+  return true;
+}
+
 function respond_(ok, token) {
   const payload = JSON.stringify({
     type: 'pttc-contact-result',
@@ -65,5 +96,6 @@ function respond_(ok, token) {
     'current=current.parent;current.postMessage(msg,"*");' +
     '}' +
     '})();<\/script></body></html>';
-  return HtmlService.createHtmlOutput(html);
+  return HtmlService.createHtmlOutput(html)
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
