@@ -56,7 +56,7 @@ function respond_(ok, token) {
     type: 'pttc-contact-result',
     ok: !!ok,
     token: String(token || '')
-  }).replace(/</g, '\u003c');
+  }).replace(/</g, '\\u003c');
   // A GAS HtmlService response may be hosted inside a Google wrapper frame.
   const html = '<!doctype html><meta charset="utf-8"><script>' +
     'window.top.postMessage(' + payload + ', "*");' +
