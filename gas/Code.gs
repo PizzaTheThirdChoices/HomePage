@@ -12,7 +12,7 @@ function doPost(e) {
     const email = String(data.email || '').trim();
     const message = String(data.message || '').trim();
     if (!name || name.length > 120 ||
-        !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) || email.length > 254 ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 ||
         !message || message.length > 10000 ||
         !/^[a-f0-9]{32}$/.test(token)) {
       return respond_(false, token);
@@ -28,7 +28,7 @@ function doPost(e) {
       const sheet = spreadsheet.getSheetByName('Contacts');
       if (!sheet) throw new Error('Create a Contacts sheet first');
       // Neutralize spreadsheet formulas entered by anonymous visitors.
-      const safe = value => /^[=+@\\-]/.test(value) ? "'" + value : value;
+      const safe = value => /^[=+@\-]/.test(value) ? "'" + value : value;
       sheet.appendRow([new Date(), safe(name), safe(email), safe(message)]);
     } finally {
       lock.releaseLock();
@@ -38,7 +38,7 @@ function doPost(e) {
       MailApp.sendEmail({
         to: notifyEmail,
         subject: '[PTTC CONTACT] 新しいお問い合わせ',
-        body: 'お名前: ' + name + '\\n返信先: ' + email + '\\n\\n本文:\\n' + message,
+        body: 'お名前: ' + name + '\n返信先: ' + email + '\n\n本文:\n' + message,
         replyTo: email
       });
     } catch (notificationError) {
@@ -56,10 +56,10 @@ function respond_(ok, token) {
     type: 'pttc-contact-result',
     ok: !!ok,
     token: String(token || '')
-  }).replace(/</g, '\\u003c');
+  }).replace(/</g, '\u003c');
   // A GAS HtmlService response may be hosted inside a Google wrapper frame.
   const html = '<!doctype html><meta charset="utf-8"><script>' +
     'window.top.postMessage(' + payload + ', "*");' +
-    '<\\/script>';
+    '</script>';
   return HtmlService.createHtmlOutput(html);
 }
