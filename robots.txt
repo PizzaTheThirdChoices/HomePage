@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /HomePage/
+Sitemap: https://pizzathethirdchoices.github.io/HomePage/sitemap.xml
