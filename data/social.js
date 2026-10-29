@@ -21,7 +21,9 @@ const socialIconPaths = {
 function renderSocialLinks(){
  document.querySelectorAll('[data-social-links]').forEach(container=>{
   container.replaceChildren();
+  const allowedServices = container.dataset.socialOnly?.split(',').map(value => value.trim());
   for(const [service,label] of Object.entries(socialNames)){
+   if (allowedServices && !allowedServices.includes(service)) continue;
    const raw=socialLinks[service];if(!raw)continue;
    let url;try{url=new URL(raw);if(url.protocol!=='https:')continue}catch{continue}
    const a=document.createElement('a');a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';a.className='social-link social-'+service;
