@@ -71,7 +71,7 @@ function step(dt){
   spawnClock-=dt;
   if(spawnClock<=0){
     addObject();
-    spawnClock=(fever>0?.19:Math.max(.37,.83-elapsed*.004))*random(.85,1.16);
+    spawnClock=(fever > 0 ? .19 : Math.max(.37,.83-elapsed*.004))*random(.85,1.16);
   }
   const px=playerX,py=player.y;
   const playerLeft=px-player.w*.36,playerRight=px+player.w*.36;
