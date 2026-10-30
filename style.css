@@ -818,7 +818,7 @@
   width: 100%;
   height: 100%;
 }
-.periodic:not(.album-layout) .pair-unit { overflow: hidden; }
+.periodic:not(.album-layout) .pair-unit { overflow: visible; }
 .periodic:not(.album-layout) .pair-unit .element {
   display: block;
   padding: 0;
