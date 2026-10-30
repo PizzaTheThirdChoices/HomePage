@@ -209,7 +209,7 @@ function renderAlbumGrid(q){
          const special=document.createElement('a');
          special.className='album-track-link';
          special.href='event.html?id='+encodeURIComponent(entry.eventId);
-         special.textContent='Live音源';
+         special.textContent=entry.label || 'Live音源';
          special.title=entry.label+' / ライブ記録へ';
          li.append(special);
          const bonus=document.createElement('span');

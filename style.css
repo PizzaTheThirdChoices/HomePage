@@ -758,6 +758,46 @@
 .contact-status[data-state="error"]{color:#ffb1b1}
 .contact-status[data-state="success"]{color:#addeb6}
 
+/* Desktop MUSIC TABLE: position both labels in the complete vertical pair
+   frame, not inside the clipped top/bottom flex regions. */
+@media (min-width: 651px) {
+  .periodic:not(.album-layout) .pair-vertical .element {
+    display: block;
+    padding: 0;
+  }
+  .periodic:not(.album-layout) .pair-vertical .num,
+  .periodic:not(.album-layout) .pair-vertical .symbol {
+    position: absolute;
+    margin: 0;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    line-height: 1;
+    z-index: 3;
+  }
+  .periodic:not(.album-layout) .pair-vertical .pair-first .num {
+    top: 8px;
+    left: 8px;
+  }
+  .periodic:not(.album-layout) .pair-vertical .pair-second .num {
+    bottom: 8px;
+    right: 8px;
+  }
+  .periodic:not(.album-layout) .pair-vertical .pair-first .symbol {
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .periodic:not(.album-layout) .pair-vertical .pair-second .symbol {
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+/* Preserve the intentional paragraph breaks in event announcements. */
+.event-description { white-space: pre-line; }
+
 /* MUSIC TABLE: one geometric rule for desktop, tablets and landscape phones.
    The container's actual inner width determines square cells and exact pair spans.
    This overrides older auto-row and min-width rules only for the creation table. */
