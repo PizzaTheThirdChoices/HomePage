@@ -879,3 +879,9 @@
   .periodic:not(.album-layout) .pair-horizontal .pair-second .num { top: 4px; right: 4px; }
   .periodic:not(.album-layout) .pair-vertical .pair-second .num { bottom: 4px; right: 4px; }
 }
+
+/* Horizontal pairs: cancel the legacy 10% left margin so the first code
+   is centered at the intended 25% point of the complete pair frame. */
+.periodic:not(.album-layout) .pair-horizontal .pair-first .symbol {
+  margin-left: 0;
+}
