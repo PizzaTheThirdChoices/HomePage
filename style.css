@@ -429,8 +429,8 @@
 }
 .periodic:not(.album-layout) .pair-horizontal > .pair-tooltip-first { left: 25%; }
 .periodic:not(.album-layout) .pair-horizontal > .pair-tooltip-second { left: 75%; }
-.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-first { left: 50%; bottom: calc(50% + 12px); }
-.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-second { left: 50%; bottom: calc(100% + 12px); }
+.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-first { left: 50%; bottom: calc(100% + 12px); }
+.periodic:not(.album-layout) .pair-vertical > .pair-tooltip-second { left: 50%; bottom: calc(50% + 12px); }
 .periodic:not(.album-layout) .pair-first:is(:hover, :focus-visible) ~ .pair-tooltip-first,
 .periodic:not(.album-layout) .pair-second:is(:hover, :focus-visible) ~ .pair-tooltip-second {
   opacity: 1;
