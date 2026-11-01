@@ -17,6 +17,40 @@ const overlay=$('game-overlay'),start=$('start-game'),pause=$('pause-game'),mute
 const character=new Image();let characterReady=false;
 if(GAME_ASSETS.character){character.onload=()=>characterReady=true;character.src=GAME_ASSETS.character;}
 const audio=new Audio();audio.preload='none';
+// Lightweight original sound effects synthesized in the browser (no audio files).
+let sfxContext=null;
+function ensureSoundContext(){
+  if(!soundOn)return null;
+  const Context=window.AudioContext||window.webkitAudioContext;
+  if(!Context)return null;
+  if(!sfxContext)sfxContext=new Context();
+  if(sfxContext.state==='suspended')sfxContext.resume().catch(()=>{});
+  return sfxContext;
+}
+function tone(frequency,duration,delay=0,type='sine',volume=.11,endingFrequency=frequency){
+  const ac=ensureSoundContext();
+  if(!ac)return;
+  const t=ac.currentTime+delay;
+  const osc=ac.createOscillator(),gain=ac.createGain();
+  osc.type=type;
+  osc.frequency.setValueAtTime(frequency,t);
+  if(endingFrequency!==frequency)osc.frequency.exponentialRampToValueAtTime(Math.max(20,endingFrequency),t+duration);
+  gain.gain.setValueAtTime(.0001,t);
+  gain.gain.exponentialRampToValueAtTime(volume,t+.008);
+  gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
+  osc.connect(gain);gain.connect(ac.destination);
+  osc.start(t);osc.stop(t+duration+.012);
+}
+function playSfx(kind){
+  if(!soundOn)return;
+  switch(kind){
+    case 'pizza': tone(520,.095,0,'sine',.09,790);break;
+    case 'combo': tone(680,.10,0,'triangle',.10,900);tone(1040,.14,.095,'sine',.10);break;
+    case 'near': tone(380,.075,0,'square',.035,580);break;
+    case 'fever': [523,659,784,1047].forEach((f,i)=>tone(f,.17,i*.085,'triangle',.09));break;
+    case 'over': tone(350,.22,0,'sawtooth',.075,210);tone(180,.28,.20,'triangle',.08,90);break;
+  }
+}
 let soundOn=false,phase='ready',last=0,elapsed=0,score=0,combo=0,maxCombo=0,near=0,totalNear=0,hunger=100,fever=0,spawnClock=0,objects=[],nextId=1,held={left:false,right:false},pointer=null,playerX=W/2,reason='',raf=0;
 const player={y:H-76,w:48,h:52};
 const random=(a,b)=>a+Math.random()*(b-a);
@@ -39,7 +73,7 @@ function reset(){
 }
 function finish(why){
   if(phase==='over')return;
-  phase='over';reason=why;pause.disabled=true;playMusic('over');
+  phase='over';reason=why;pause.disabled=true;playMusic('over');playSfx('over');
   $('overlay-title').textContent='GAME OVER';
   $('overlay-message').textContent=why;
   $('result-summary').textContent='SCORE  '+score.toLocaleString()+'\nTIME  '+elapsed.toFixed(1)+'s\nMAX COMBO  '+maxCombo+'\nNEAR MISS  '+totalNear;
@@ -59,7 +93,7 @@ function startFever(){
   fever=8;near=0;
   // Clear pre-existing pineapples so fever is completely hazard-free.
   objects=objects.filter(o=>o.kind!=='pineapple');
-  playMusic('fever');
+  playMusic('fever');playSfx('fever');
 }
 function step(dt){
   elapsed+=dt;hunger-=dt*8.3;
@@ -86,6 +120,7 @@ function step(dt){
       o.judged=true;
       if(o.kind==='pineapple'){finish('PINEAPPLE!');return;}
       combo++;maxCombo=Math.max(maxCombo,combo);
+      playSfx(combo>1&&combo%5===0?'combo':'pizza');
       const points=o.kind==='gold'?500:100;
       score+=points*Math.min(5,1+Math.floor((combo-1)/5));
       hunger=clamp(hunger+(o.kind==='gold'?13:29),0,100);
@@ -95,7 +130,7 @@ function step(dt){
       if(o.y-o.r>playerBottom){
         const gap=Math.max(playerLeft-(o.x+o.r*.79), (o.x-o.r*.79)-playerRight);
         if(gap>=0&&gap<=18){
-          near++;totalNear++;score+=200;
+          near++;totalNear++;score+=200;playSfx('near');
           if(near>=5)startFever();
         }else near=0; // A normal dodge interrupts the near-miss streak.
         o.judged=true;
@@ -129,12 +164,12 @@ function frame(t){
   draw();
   if(isPlaying())raf=requestAnimationFrame(frame);
 }
-start.addEventListener('click',()=>{$('overlay-title').textContent='PIZZA OR DIE';reset();});
+start.addEventListener('click',()=>{if(soundOn)ensureSoundContext();$('overlay-title').textContent='PIZZA OR DIE';reset();});
 pause.addEventListener('click',()=>{
   if(phase==='playing'){phase='paused';pause.textContent='RESUME';audio.pause();overlay.hidden=false;$('overlay-title').textContent='PAUSED';$('overlay-message').textContent='PAUSEボタンで再開';start.hidden=true;}
   else if(phase==='paused'){phase='playing';pause.textContent='PAUSE';overlay.hidden=true;start.hidden=false;last=0;playMusic(fever>0?'fever':'play');raf=requestAnimationFrame(frame);}
 });
-mute.addEventListener('click',()=>{soundOn=!soundOn;mute.textContent=soundOn?'SOUND ON':'SOUND OFF';mute.setAttribute('aria-pressed',String(soundOn));if(soundOn&&isPlaying())playMusic(fever>0?'fever':'play');else audio.pause();});
+mute.addEventListener('click',()=>{soundOn=!soundOn;if(soundOn)ensureSoundContext();mute.textContent=soundOn?'SOUND ON':'SOUND OFF';mute.setAttribute('aria-pressed',String(soundOn));if(soundOn&&isPlaying())playMusic(fever>0?'fever':'play');else audio.pause();});
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){if(isPlaying()){e.preventDefault();held[e.key==='ArrowLeft'?'left':'right']=true;}}else if(e.key==='Escape'&&phase==='playing')pause.click();});
 document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight')held[e.key==='ArrowLeft'?'left':'right']=false;});
 window.addEventListener('blur',()=>{held.left=held.right=false;if(isPlaying())pause.click();});
