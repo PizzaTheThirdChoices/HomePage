@@ -885,3 +885,8 @@
 .periodic:not(.album-layout) .pair-horizontal .pair-first .symbol {
   margin-left: 0;
 }
+
+/* Related Shorts: three newest initially, expandable on demand. */
+.related-video-card[hidden]{display:none!important}
+.related-video-more{display:block;margin:14px auto 0;padding:10px 18px;border:1px solid currentColor;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.related-video-more:hover,.related-video-more:focus-visible{background:rgba(255,255,255,.12)}
