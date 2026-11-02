@@ -26,7 +26,12 @@ function videoFor(song){const id=youtubeId(songVideos[song.number]);if(!id)retur
 // Related Shorts are a separate collection from the single song-explanation video.
 function relatedVideosFor(song){
  const urls=typeof relatedSongVideos==='undefined'?[]:(relatedSongVideos[song.number]||[]);
- const entries=urls.map(url=>({url,id:youtubeId(url)})).filter(entry=>entry.id);
+ // URLs are stored oldest first; show the newest Shorts first.
+ const seen=new Set();
+ const entries=urls.slice().reverse().map(url=>({url,id:youtubeId(url)})).filter(entry=>{
+  if(!entry.id||seen.has(entry.id))return false;
+  seen.add(entry.id);return true;
+ });
  if(!entries.length)return null;
  const section=document.createElement('section');
  section.className='related-video-section';
@@ -37,6 +42,7 @@ function relatedVideosFor(song){
  list.setAttribute('aria-label',song.title+' の関連動画');
  entries.forEach(({id},index)=>{
   const card=document.createElement('div');card.className='related-video-card';
+  if(index>=3)card.hidden=true;
   const frame=document.createElement('iframe');
   frame.className='related-video-player';
   frame.src='https://www.youtube-nocookie.com/embed/'+id;
@@ -51,6 +57,17 @@ function relatedVideosFor(song){
   card.append(frame,link);list.append(card);
  });
  section.append(heading,list);
+ if(entries.length>3){
+  const more=document.createElement('button');more.type='button';more.className='related-video-more';
+  more.textContent='もっと見る ('+(entries.length-3)+')';more.setAttribute('aria-expanded','false');
+  more.addEventListener('click',()=>{
+   const expanded=more.getAttribute('aria-expanded')!=='true';
+   list.querySelectorAll('.related-video-card').forEach((card,i)=>{card.hidden=!expanded&&i>=3;});
+   more.setAttribute('aria-expanded',String(expanded));
+   more.textContent=expanded?'閉じる':'もっと見る ('+(entries.length-3)+')';
+  });
+  section.append(more);
+ }
  return section;
 }
 
