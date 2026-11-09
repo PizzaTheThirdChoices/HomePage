@@ -7,7 +7,7 @@ const liveEvents = [
    description:'Pizza The Third Choicesはesperkickから33曲入りのアルバムを出します！\n\nそれを記念して11/8(日)に下北沢LIVEHAUSにてライブを開催します🍕\n最高のバンドが集結！\nチケットのお取置きは予約フォームから！\n\nOPEN 17:30\nSTART 18:00\nU22 or 学生：2,300+1d\n一般：2,800+1d',
    media:[
     {type:'flyer',src:'assets/events/261108-PerfectPizzaParty.webp'},
-    {type:'setlist',src:'assets/setlist/261108-PerfectPizzaParty.pdf'}]},
+    {type:'setlist',src:'assets/setlist/261108-PerfectPizzaPerty.pdf'}]},
   {id:'20260829',date:'2026-08-29',title:'Komaba Independence Days',venue:'',
    media:[
     {type:'flyer',src:'assets/events/260829-KomabaIndependenceDays-1.JPG'},
