@@ -22,7 +22,7 @@
       <div class="game-toolbar">
         <span>SCORE <strong id="score">0</strong></span>
         <span>COMBO <strong id="combo">0</strong></span>
-        <span>NEAR MISS <strong id="near">0/5</strong></span>
+        <span>NEAR MISS <strong id="near">0/3</strong></span>
         <span>TIME <strong id="time">0.0s</strong></span>
       </div>
       <div class="hunger-row"><label for="hunger">HUNGER</label><progress id="hunger" max="100" value="100">100%</progress></div>
@@ -30,7 +30,7 @@
         <canvas id="game" width="420" height="650" aria-label="ピザを集めてパイナップルを避けるゲーム"></canvas>
         <div id="game-overlay" class="game-overlay">
           <h2 id="overlay-title">PIZZA OR DIE</h2>
-          <p id="overlay-message">PC: ← → キー / スマホ: 指を左右にドラッグ</p>
+          <p id="overlay-message">PC: ← → 移動・スペースで攻撃 / スマホ: ドラッグ移動・ボス戦中タッチで攻撃</p>
           <button id="start-game" type="button">START GAME</button>
           <div id="results" hidden>
             <p id="result-summary"></p>
@@ -42,7 +42,7 @@
         <button id="pause-game" type="button" disabled>PAUSE</button>
         <button id="mute-game" type="button" aria-pressed="true">SOUND OFF</button>
       </div>
-      <p class="game-help">通常ピザで空腹回復。5連続NEAR MISSでフィーバー！ フィーバー中はパイナップルなし。</p>
+      <p class="game-help">通常ピザで空腹回復。3回NEAR MISSでフィーバー！ 黄色い点線がNEAR MISSの目安です。ピザを12枚集めるとボス戦！ PCはスペースキー、スマホは画面をタッチしてピザを連射。ボスを倒すと大量のピザが降ってきます。</p>
       <p class="game-help">音楽・キャラクター画像は後から差し替え可能です。現在は仮素材・無音です。</p>
     </main>
     <footer>© Pizza The Third Choices</footer>
