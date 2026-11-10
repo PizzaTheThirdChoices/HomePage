@@ -17,7 +17,9 @@ const overlay=$('game-overlay'),start=$('start-game'),pause=$('pause-game'),mute
 const character=new Image();let characterReady=false;
 if(GAME_ASSETS.character){character.onload=()=>characterReady=true;character.src=GAME_ASSETS.character;}
 const audio=new Audio();audio.preload='none';
-let soundOn=false,phase='ready',last=0,elapsed=0,score=0,combo=0,maxCombo=0,near=0,totalNear=0,hunger=100,fever=0,spawnClock=0,objects=[],nextId=1,held={left:false,right:false},pointer=null,playerX=W/2,reason='',raf=0;
+let soundOn=false,phase='ready',last=0,elapsed=0,score=0,combo=0,maxCombo=0,near=0,totalNear=0,hunger=100,fever=0,spawnClock=0,objects=[],nextId=1,held={left:false,right:false,fire:false},pointer=null,playerX=W/2,reason='',raf=0;
+const NEAR_RANGE=34,BOSS_EVERY=12;
+let pizzasCollected=0,nextBossAt=BOSS_EVERY,boss=null,enemyShots=[],pizzaShots=[],shotClock=0,burstClock=0,burstRemaining=0,invulnerable=0;
 const player={y:H-76,w:48,h:52};
 const random=(a,b)=>a+Math.random()*(b-a);
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -33,7 +35,7 @@ function playMusic(kind){
 }
 function reset(){
   cancelAnimationFrame(raf);
-  elapsed=score=combo=maxCombo=near=totalNear=fever=spawnClock=0;hunger=100;objects=[];nextId=1;playerX=W/2;last=0;reason='';
+  elapsed=score=combo=maxCombo=near=totalNear=fever=spawnClock=0;hunger=100;objects=[];nextId=1;playerX=W/2;last=0;reason='';pizzasCollected=0;nextBossAt=BOSS_EVERY;boss=null;enemyShots=[];pizzaShots=[];shotClock=burstClock=burstRemaining=invulnerable=0;held.fire=false;
   phase='playing';overlay.hidden=true;pause.disabled=false;pause.textContent='PAUSE';$('results').hidden=true;
   playMusic('play');updateHud();raf=requestAnimationFrame(frame);
 }
@@ -52,8 +54,19 @@ function addObject(){
   const radius=pineapple?20:golden?21:19;
   objects.push({id:nextId++,x:random(radius+8,W-radius-8),y:-radius-5,r:radius,kind:pineapple?'pineapple':golden?'gold':'pizza',speed:Math.min(510,175+elapsed*2.1)*random(.88,1.13),nearCandidate:false,judged:false});
 }
+function startBoss(){
+  boss={x:W/2,y:105,hp:24,maxHp:24,t:0,fireClock:.8};
+  objects=[];enemyShots=[];pizzaShots=[];fever=0;near=0;spawnClock=0;shotClock=0;
+  playMusic('play');
+}
+function defeatBoss(){
+  boss=null;enemyShots=[];pizzaShots=[];burstRemaining=28;burstClock=0;
+  hunger=clamp(hunger+45,0,100);score+=3000;
+  nextBossAt=pizzasCollected+BOSS_EVERY;
+}
+function shootPizza(){pizzaShots.push({x:playerX,y:player.y-30,r:11});}
 function updateHud(){
-  $('score').textContent=score.toLocaleString();$('combo').textContent=String(combo);$('near').textContent=near+'/5';$('time').textContent=elapsed.toFixed(1)+'s';$('hunger').value=Math.max(0,hunger);
+  $('score').textContent=score.toLocaleString();$('combo').textContent=String(combo);$('near').textContent=near+'/3';$('time').textContent=elapsed.toFixed(1)+'s';$('hunger').value=Math.max(0,hunger);
 }
 function startFever(){
   fever=8;near=0;
@@ -64,14 +77,38 @@ function startFever(){
 function step(dt){
   elapsed+=dt;hunger-=dt*8.3;
   if(hunger<=0){hunger=0;finish('HUNGER ZERO — ピザを食べ続けよう！');return;}
+  invulnerable=Math.max(0,invulnerable-dt);
   if(held.left)playerX-=300*dt;
   if(held.right)playerX+=300*dt;
   playerX=clamp(playerX,player.w/2+4,W-player.w/2-4);
   if(fever>0){fever=Math.max(0,fever-dt);if(fever===0)playMusic('play');}
+  if(boss){
+    boss.t+=dt;boss.x=W/2+Math.sin(boss.t*1.3)*115;
+    boss.fireClock-=dt;
+    if(boss.fireClock<=0){
+      for(let i=-3;i<=3;i++){
+        const angle=Math.PI/2+i*.20+Math.sin(boss.t)*.08;
+        enemyShots.push({x:boss.x,y:boss.y+45,vx:Math.cos(angle)*205,vy:Math.sin(angle)*205,r:12});
+      }
+      boss.fireClock=.85;
+    }
+    shotClock-=dt;
+    if((held.fire||pointer)&&shotClock<=0){shootPizza();shotClock=.19;}
+    for(const p of pizzaShots){p.y-=480*dt;if(Math.hypot(p.x-boss.x,p.y-boss.y)<55){p.y=-100;boss.hp--;}}
+    pizzaShots=pizzaShots.filter(p=>p.y>-20);
+    if(boss.hp<=0)defeatBoss();
+    if(boss){
+      for(const p of enemyShots){p.x+=p.vx*dt;p.y+=p.vy*dt;
+        if(invulnerable===0&&Math.abs(p.x-playerX)<player.w*.34+p.r*.7&&Math.abs(p.y-player.y)<player.h*.4+p.r*.7){finish('PINEAPPLE BARRAGE!');return;}
+      }
+      enemyShots=enemyShots.filter(p=>p.y<H+25&&p.x>-25&&p.x<W+25);
+      updateHud();return;
+    }
+  }
   spawnClock-=dt;
   if(spawnClock<=0){
-    addObject();
-    spawnClock=(fever > 0 ? .19 : Math.max(.37,.83-elapsed*.004))*random(.85,1.16);
+    if(burstRemaining>0){objects.push({id:nextId++,x:random(25,W-25),y:-25,r:19,kind:'gold',speed:random(170,290),nearCandidate:false,judged:false});burstRemaining--;spawnClock=.075;}
+    else{addObject();spawnClock=(fever>0?.19:Math.max(.37,.83-elapsed*.004))*random(.85,1.16);}
   }
   const px=playerX,py=player.y;
   const playerLeft=px-player.w*.36,playerRight=px+player.w*.36;
@@ -89,15 +126,16 @@ function step(dt){
       const points=o.kind==='gold'?500:100;
       score+=points*Math.min(5,1+Math.floor((combo-1)/5));
       hunger=clamp(hunger+(o.kind==='gold'?13:29),0,100);
+      if(o.kind==='pizza'){pizzasCollected++;if(pizzasCollected>=nextBossAt&&!boss){startBoss();updateHud();return;}}
       o.y=H+100;
     }else if(o.kind==='pineapple'&&!o.judged){
       // A near miss counts only after the obstacle fully passes the player.
       if(o.y-o.r>playerBottom){
         const gap=Math.max(playerLeft-(o.x+o.r*.79), (o.x-o.r*.79)-playerRight);
-        if(gap>=0&&gap<=18){
+        if(gap>=0&&gap<=NEAR_RANGE){
           near++;totalNear++;score+=200;
-          if(near>=5)startFever();
-        }else near=0; // A normal dodge interrupts the near-miss streak.
+          if(near>=3)startFever();
+        } // A safe dodge does not reset progress.
         o.judged=true;
       }
     }else if(o.kind!=='pineapple'&&!o.judged&&o.y-o.r>playerBottom){
@@ -112,11 +150,22 @@ function draw(){
   ctx.strokeStyle='#2c2c2c';ctx.lineWidth=1;
   for(let x=35;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
   if(fever>0){ctx.fillStyle='rgba(255,190,30,.10)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ffda54';ctx.font='bold 26px Arial';ctx.textAlign='center';ctx.fillText('FEVER TIME  '+fever.toFixed(1),W/2,60);}
+  if(boss){
+    ctx.font='104px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍍',boss.x,boss.y);
+    ctx.fillStyle='#555';ctx.fillRect(50,18,W-100,12);ctx.fillStyle='#ff7354';ctx.fillRect(50,18,(W-100)*boss.hp/boss.maxHp,12);
+    ctx.font='bold 17px Arial';ctx.fillStyle='#fff';ctx.fillText('PINEAPPLE BOSS — FIRE!',W/2,49);
+    for(const p of enemyShots){ctx.font='29px sans-serif';ctx.fillText('🍍',p.x,p.y);}
+    for(const p of pizzaShots){ctx.font='25px sans-serif';ctx.fillText('🍕',p.x,p.y);}
+  }
   for(const o of objects){
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=(o.kind==='pineapple'?43:43)+'px sans-serif';
     if(o.kind==='pineapple')ctx.fillText('🍍',o.x,o.y);
     else if(o.kind==='gold'){ctx.fillText('🍕',o.x,o.y);ctx.strokeStyle='#ffe15d';ctx.lineWidth=4;ctx.beginPath();ctx.arc(o.x,o.y,25,0,Math.PI*2);ctx.stroke();}
     else ctx.fillText('🍕',o.x,o.y);
+  }
+  if(!boss&&fever===0){
+    ctx.strokeStyle='rgba(255,204,100,.85)';ctx.lineWidth=2;ctx.setLineDash([6,5]);
+    ctx.strokeRect(playerX-player.w*.36-NEAR_RANGE,player.y-player.h*.42-NEAR_RANGE,player.w*.72+NEAR_RANGE*2,player.h*.84+NEAR_RANGE*2);ctx.setLineDash([]);
   }
   if(characterReady){ctx.drawImage(character,playerX-player.w/2,player.y-player.h/2,player.w,player.h);}
   else{ctx.font='49px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('😈',playerX,player.y);}
@@ -135,9 +184,9 @@ pause.addEventListener('click',()=>{
   else if(phase==='paused'){phase='playing';pause.textContent='PAUSE';overlay.hidden=true;start.hidden=false;last=0;playMusic(fever>0?'fever':'play');raf=requestAnimationFrame(frame);}
 });
 mute.addEventListener('click',()=>{soundOn=!soundOn;mute.textContent=soundOn?'SOUND ON':'SOUND OFF';mute.setAttribute('aria-pressed',String(soundOn));if(soundOn&&isPlaying())playMusic(fever>0?'fever':'play');else audio.pause();});
-document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){if(isPlaying()){e.preventDefault();held[e.key==='ArrowLeft'?'left':'right']=true;}}else if(e.key==='Escape'&&phase==='playing')pause.click();});
-document.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight')held[e.key==='ArrowLeft'?'left':'right']=false;});
-window.addEventListener('blur',()=>{held.left=held.right=false;if(isPlaying())pause.click();});
+document.addEventListener('keydown',e=>{if(e.code==='Space'){if(isPlaying()){e.preventDefault();held.fire=true;}}else if(e.key==='ArrowLeft'||e.key==='ArrowRight'){if(isPlaying()){e.preventDefault();held[e.key==='ArrowLeft'?'left':'right']=true;}}else if(e.key==='Escape'&&phase==='playing')pause.click();});
+document.addEventListener('keyup',e=>{if(e.code==='Space')held.fire=false;else if(e.key==='ArrowLeft'||e.key==='ArrowRight')held[e.key==='ArrowLeft'?'left':'right']=false;});
+window.addEventListener('blur',()=>{held.left=held.right=held.fire=false;if(isPlaying())pause.click();});
 canvas.addEventListener('pointerdown',e=>{if(!isPlaying())return;pointer={id:e.pointerId,x:e.clientX};canvas.setPointerCapture(e.pointerId);});
 canvas.addEventListener('pointermove',e=>{if(!isPlaying()||!pointer||pointer.id!==e.pointerId)return;const scale=W/canvas.getBoundingClientRect().width;playerX=clamp(playerX+(e.clientX-pointer.x)*scale,player.w/2+4,W-player.w/2-4);pointer.x=e.clientX;});
 const endPointer=e=>{if(pointer&&pointer.id===e.pointerId)pointer=null;};
