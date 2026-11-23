@@ -133,6 +133,13 @@ function renderMerch() {
     // ----------------------------------------
     article.append(gallery);
 
+    // 商品説明（例：カセットの収録内容）
+    if (item.description) {
+      const description = document.createElement('p');
+      description.textContent = item.description;
+      article.append(description);
+    }
+
 
 
     // ----------------------------------------

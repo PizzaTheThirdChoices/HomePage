@@ -24,6 +24,12 @@ const relatedSongVideos = {
   21: [
     'https://youtu.be/IdpgGsOs1y0'
   ],
+  23: [
+    'https://youtube.com/shorts/LzaoJ5-gYGs'
+  ],
+  27: [
+    'https://youtube.com/shorts/tM6RFmGZNIE'
+  ],
   32: [
     'https://youtu.be/-c1SmOj-rts'
   ],
