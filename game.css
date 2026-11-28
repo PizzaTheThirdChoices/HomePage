@@ -1,0 +1,23 @@
+/* PIZZA OR DIE: isolated game styles. */
+.game-page{max-width:760px;margin:32px auto 70px}
+.game-heading{text-align:center;margin-bottom:22px}
+.game-heading h1{font:900 clamp(32px,7vw,62px) Impact,'Arial Black',sans-serif;letter-spacing:.06em;margin:8px 0}
+.game-heading p{font-size:13px}
+.game-toolbar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 18px;font:12px Arial,sans-serif;letter-spacing:.06em;margin:12px auto;max-width:500px}
+.game-toolbar strong{font-size:16px;color:#ffcb55}
+.hunger-row{display:flex;align-items:center;gap:12px;max-width:500px;margin:12px auto;font:700 12px Arial,sans-serif}
+.hunger-row progress{flex:1;height:18px;accent-color:#ff9c45}
+.game-stage{position:relative;width:min(100%,500px);margin:0 auto;border:2px solid #eee;background:#171717;overflow:hidden;touch-action:none;user-select:none}
+.game-stage canvas{display:block;width:100%;height:auto;aspect-ratio:420/650;touch-action:none}
+.game-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:22px;background:rgba(0,0,0,.78);text-align:center}
+.game-overlay[hidden],#results[hidden]{display:none}
+.game-overlay h2{font:900 clamp(28px,7vw,44px) Impact,sans-serif;color:#ffcb55}
+.game-overlay p{font:14px/1.7 Arial,sans-serif;max-width:330px}
+.game-overlay button,.game-controls button{border:1px solid #fff;background:#fff;color:#111;padding:12px 18px;font:700 13px Arial,sans-serif;cursor:pointer}
+.game-overlay button:hover,.game-controls button:hover:not(:disabled){background:#ffcb55}
+.game-controls{display:flex;justify-content:center;gap:12px;margin:18px auto}
+.game-controls button:disabled{opacity:.35;cursor:not-allowed}
+#results{width:100%}
+#result-summary{white-space:pre-line}
+.game-help{text-align:center;font:12px/1.8 Arial,sans-serif;color:#bbb;margin:12px auto;max-width:520px}
+@media(max-width:650px){.game-page{margin:22px auto 45px}.game-toolbar{font-size:10px;gap:7px}.game-toolbar strong{font-size:13px}.game-stage{width:100%}}
